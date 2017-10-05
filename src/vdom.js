@@ -1,6 +1,6 @@
 const vdom = () => {
   const createElement = (node) => {
-    if (typeof node === 'string' || typeof node === 'number')
+    if (typeof node === 'string')
       return document.createTextNode(node);
 
     const { type, props, children } = node;
@@ -40,7 +40,7 @@ const vdom = () => {
 
   const diff = (original, updated) =>
     typeof original !== typeof updated ||
-    ((typeof original === 'string' || typeof original === 'number') && original !== updated) ||
+    (typeof original === 'string' && original !== updated) ||
     original.type !== updated.type ||
     original.props !== updated.props;
 
