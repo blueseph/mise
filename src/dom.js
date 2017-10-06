@@ -1,8 +1,12 @@
 const dom = (type, uncheckedProps = {}, ...uncheckedChildren) => {
   let children = [];
   let props = uncheckedProps;
+
   for (const child of uncheckedChildren) {
-    children = [ ... children, typeof child === 'number' ? String(child) : child];
+    if (Array.isArray(child))
+      children = [ ...children, ...child];
+    else
+      children = [ ...children, typeof child === 'number' ? String(child) : child];
   }
 
   if (uncheckedProps === null)

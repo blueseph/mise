@@ -4,9 +4,11 @@ component({
   template: state => actions => (
     <div>
       <h1>Todos</h1>
-      {state.todos.map(todo =>
-        (<div>{todo.text}</div>)
-      )}
+      <ul>
+        {state.todos.map(todo =>
+          (<li>{todo.text}</li>)
+        )}
+      </ul>
 
       <input
         type="text"
