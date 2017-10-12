@@ -12,6 +12,10 @@ const dom = (type, uncheckedProps = {}, ...uncheckedChildren) => {
   if (uncheckedProps === null)
     props = undefined;
 
+  if (typeof type === 'function') {
+    return type(props, children);
+  }
+
   return { type, props, children };
 };
 

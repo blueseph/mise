@@ -14,35 +14,54 @@ const vdom = () => {
     return element;
   };
 
-  const update = (parent, original, updated, index = 0) => {
+  const diff = (parent, element, original, updated, itemsToRemove) => {
     if (!original)
-      parent.appendChild(createElement(updated));
+      parent.appendChild(
+        createElement(updated)
+      );
     else if (!updated)
-      parent.removeChild(parent.childNodes[index]);
+      itemsToRemove.push(element); // :puke:
+    else if (shouldReplace(original, updated))
+      parent.replaceChild(
+        createElement(updated),
+        element
+      );
     else
-      if (shouldReplace(original, updated))
-        parent.replaceChild(
-          createElement(updated),
-          parent.childNodes[index]
-        );
-      else
-        updateProps(
-          parent.childNodes[index],
-          original.props,
-          updated.props
-        );
+      updateProps(
+        element,
+        original.props,
+        updated.props
+      );
+  };
 
-    if (updated && updated.type && original && original.type) {
-      const length = Math.max((original.children && original.children.length) || 0, (updated.children && updated.children.length) || 0);
+  const update = (parent, element, original, updated, itemsToRemove) => {
+    diff(parent, element, original, updated, itemsToRemove);
 
-      for (let i = 0; i < length; i++) {
+    if ((updated && updated.children) && (original && original.children)) {
+      const maxChildren = Math.max(
+        (original && original.children && original.children.length) || 0,
+        (updated && updated.children && updated.children.length) || 0
+      );
+
+      for (let i = 0; i < maxChildren; i++) {
         update(
-          parent.childNodes[index],
+          element,
+          (element && element.childNodes[i]) || undefined,
           original.children[i],
           updated.children[i],
-          i
+          itemsToRemove
         );
       }
+    }
+  };
+
+  const updateDOM = (parent, original, updated) => {
+    const itemsToRemove = [];
+
+    update(parent, parent.childNodes[0], original, updated, itemsToRemove);
+
+    for (const item of itemsToRemove) {
+      item.remove();
     }
   };
 
@@ -55,10 +74,10 @@ const vdom = () => {
     const props = new Set(Object.keys(original), Object.keys(updated));
 
     for (const prop of props) {
-      if (!original[prop])
+      if (!original[prop] || original[props] !== updated[props] || prop === 'style')
         addProp(element, prop, updated[prop]);
       else if (!updated[prop])
-        removeProp(element, prop, original[prop]);
+        removeProp(element, prop);
     }
   };
 
@@ -70,28 +89,31 @@ const vdom = () => {
     }
   };
 
-  const handleSpecialProps = (element, attribute, value) => {
+  const addProp = (element, attribute, value) => {
     if (attribute === 'className') {
       element.setAttribute('class', value);
-      return false;
+      return;
     } else if (typeof value === 'boolean'){
       if (value) {
         element.setAttribute(attribute, value);
         element[attribute] = value;
       }
-      return false;
-    } else if (typeof value === 'function') {
-      element[attribute] = value;
-      return false;
+      return;
+    } else if (typeof value === 'function' || attribute === 'value') {
+      if (value !== undefined || value !== null)
+        element[attribute] = value;
+      return;
+    } else if (attribute === 'style') {
+      element.removeAttribute(attribute);
+      if (value && Object.keys(value).length) {
+        for (const [key, val] of Object.entries(value)) {
+          element.style[key] = val;
+        }
+      }
+      return;
     }
 
-    return true;
-  };
-
-  const addProp = (element, attribute, value) => {
-    const standardProp = handleSpecialProps(element, attribute, value);
-    if (standardProp)
-      element.setAttribute(attribute, value);
+    element.setAttribute(attribute, value);
   };
 
   const removeProp = (element, attribute, value) => {
@@ -100,7 +122,7 @@ const vdom = () => {
 
   return {
     createElement,
-    update,
+    updateDOM,
   };
 };
 

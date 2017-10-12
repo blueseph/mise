@@ -1,7 +1,7 @@
-import VDOM from './vdom';
+import { vdom } from './vdom';
 
 const component = ({template, state, actions, root = document.body}) => {
-  const vdom = VDOM();
+  const VDOM = vdom();
   let appState;
   let appTemplate;
   let appActions;
@@ -37,7 +37,7 @@ const component = ({template, state, actions, root = document.body}) => {
     const oldTemplate = appTemplate;
     appTemplate = generateTemplate(appState)(appActions);
 
-    vdom.update(root, oldTemplate, appTemplate);
+    VDOM.updateDOM(root, oldTemplate, appTemplate);
   };
 
   const requestRender = () => {
@@ -49,7 +49,7 @@ const component = ({template, state, actions, root = document.body}) => {
     appActions = bindUpdateToActions(actions);
     appTemplate = generateTemplate(appState)(appActions);
 
-    root.appendChild(vdom.createElement(appTemplate));
+    root.appendChild(VDOM.createElement(appTemplate));
   };
 
   const generateTemplate = state => actions =>{
