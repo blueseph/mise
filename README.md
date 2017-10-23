@@ -1,7 +1,35 @@
-# Mise (en place)
+# Mise (_en place_)
 
-[Mise](https://en.wikipedia.org/wiki/Mise_en_place) is a fully-featured front-end application library with built-in state management. Mise focuses on using **component-based** architecture to create simple and re-usable bits of code to structure your application. You explicitly manipulate your state *only* via actions. Code paths are clearly defined and change in predictable ways. Applications are highly and rigorously testable.
+[Mise](https://en.wikipedia.org/wiki/Mise_en_place) is a fully-featured front-end application library with built-in state management. Mise uses component-based architecture to promote [constructing elegant hierarchies for maximum code reuse and extensibility](http://siliconvalleyism.com/silicon-valley-quote.php?id=206). By explicitly manipulating your state _only_ via actions, code paths are clearly defined and change in predictable ways. Applications lend themselves to being highly and rigorously testable.
 
+Mise has zero dependencies and strives for performance.
+
+* VDOM managed updates for fast rendering.
+* Easy state-management.
+* Highly testable.
+* Minimal (2kb minified, 977 bytes gzipped)
+
+#### Installation (coming soon)
+```
+npm i mise
+```
+
+In your actual project
+
+```javascript
+import { dom, mise } from 'mise';
+```
+
+Or, if you prefer to use umd
+
+```javascript
+<script async src="https://unpkg.com/mise"></script>
+<script type="javascript">
+  const { dom, component } = mise;
+</script>
+```
+
+##### Example
 ```
 import { dom, component } from 'mise';
 
@@ -23,8 +51,3 @@ component({
   root: document.querySelector('#app'),
 });
 ```
-
-* VDOM for fast rendering
-* Managed state system
-* Automatic handling of *thunks* (asynchronous actions)
-* Small (2kb minified, 700 bytes minified)
