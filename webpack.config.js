@@ -8,6 +8,7 @@ module.exports = {
     path: path.resolve (__dirname, 'dist'),
     filename: 'mise.min.js',
     library: 'mise',
+    libraryTarget: 'commonjs2',
   },
 
   module: {

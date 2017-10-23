@@ -19,4 +19,4 @@ const dom = (type, uncheckedProps = {}, ...uncheckedChildren) => {
   return { type, props, children };
 };
 
-export default dom;
+export { dom };
