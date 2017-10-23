@@ -6,9 +6,9 @@ module.exports = {
 
   output: {
     path: path.resolve (__dirname, 'dist'),
-    filename: 'mise.min.js',
+    filename: 'mise.js',
     library: 'mise',
-    libraryTarget: 'commonjs2',
+    libraryTarget: 'umd',
   },
 
   module: {
