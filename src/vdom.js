@@ -1,17 +1,33 @@
 const vdom = () => {
-  const createElement = (node) => {
-    if (typeof node === 'string')
-      return document.createTextNode(node);
+  const updateDOM = (parent, original, updated) => {
+    const itemsToRemove = [];
 
-    const { type, props, children } = node;
-    const element = document.createElement(type);
-    setProps(element, props);
+    update(parent, parent.childNodes[0], original, updated, itemsToRemove);
 
-    children
-      .map(createElement)
-      .forEach(child => element.appendChild(child));
+    for (const item of itemsToRemove) {
+      item.remove();
+    }
+  };
 
-    return element;
+  const update = (parent, element, original, updated, itemsToRemove) => {
+    diff(parent, element, original, updated, itemsToRemove);
+
+    if ((updated && updated.children) && (original && original.children)) {
+      const maxChildren = Math.max(
+        original.children.length,
+        updated.children.length
+      );
+
+      for (let i = 0; i < maxChildren; i++) {
+        update(
+          element,
+          (element && element.childNodes[i]) || undefined,
+          original.children[i],
+          updated.children[i],
+          itemsToRemove
+        );
+      }
+    }
   };
 
   const diff = (parent, element, original, updated, itemsToRemove) => {
@@ -34,35 +50,19 @@ const vdom = () => {
       );
   };
 
-  const update = (parent, element, original, updated, itemsToRemove) => {
-    diff(parent, element, original, updated, itemsToRemove);
+  const createElement = (node) => {
+    if (typeof node === 'string')
+      return document.createTextNode(node);
 
-    if ((updated && updated.children) && (original && original.children)) {
-      const maxChildren = Math.max(
-        (original && original.children && original.children.length) || 0,
-        (updated && updated.children && updated.children.length) || 0
-      );
+    const { type, props, children } = node;
+    const element = document.createElement(type);
+    setProps(element, props);
 
-      for (let i = 0; i < maxChildren; i++) {
-        update(
-          element,
-          (element && element.childNodes[i]) || undefined,
-          original.children[i],
-          updated.children[i],
-          itemsToRemove
-        );
-      }
-    }
-  };
+    children
+      .map(createElement)
+      .forEach(child => element.appendChild(child));
 
-  const updateDOM = (parent, original, updated) => {
-    const itemsToRemove = [];
-
-    update(parent, parent.childNodes[0], original, updated, itemsToRemove);
-
-    for (const item of itemsToRemove) {
-      item.remove();
-    }
+    return element;
   };
 
   const shouldReplace = (original, updated) =>
@@ -74,50 +74,62 @@ const vdom = () => {
     const props = new Set(Object.keys(original), Object.keys(updated));
 
     for (const prop of props) {
-      if (!original[prop] || original[props] !== updated[props] || prop === 'style')
-        addProp(element, prop, updated[prop]);
-      else if (!updated[prop])
-        removeProp(element, prop);
+      setProp(element, prop, original[prop], updated[prop]);
     }
   };
 
   const setProps = (element, props) => {
-    if (props && Object.keys(props)) {
-      for (let [attribute, value] of Object.entries(props)) {
-        addProp(element, attribute, value);
-      }
+    for (let [attribute, value] of Object.entries(props)) {
+      setProp(element, attribute, {}, value);
     }
   };
 
-  const addProp = (element, attribute, value) => {
-    if (attribute === 'className') {
-      element.setAttribute('class', value);
+  const setProp = (element, attribute, original, updated) => {
+    if (attribute === 'value') {
+      if (updated || updated === 0 || updated === '')
+        element[attribute] = updated;
       return;
-    } else if (typeof value === 'boolean'){
-      if (value) {
-        element.setAttribute(attribute, value);
-        element[attribute] = value;
+    }
+
+    if (typeof updated === 'boolean'){
+      if (updated) {
+        element.setAttribute(attribute, updated);
+        element[attribute] = updated;
       }
       return;
-    } else if (typeof value === 'function' || attribute === 'value') {
-      if (value !== undefined || value !== null)
-        element[attribute] = value;
+    }
+
+    if (typeof updated === 'function') {
+      element[attribute] = updated;
       return;
-    } else if (attribute === 'style') {
+    }
+
+    if (attribute === 'value') {
+      if (updated || updated === 0 || updated === '')
+        element[attribute] = updated;
+      return;
+    }
+
+    if (!updated || (typeof updated === 'object' && !Object.keys(updated).length)) {
       element.removeAttribute(attribute);
-      if (value && Object.keys(value).length) {
-        for (const [key, val] of Object.entries(value)) {
-          element.style[key] = val;
+      return;
+    }
+
+    if (attribute === 'style') {
+      const styles = new Set(Object.keys(updated), Object.keys(original));
+
+      for (const style of styles) {
+        if (!updated[style])
+          element.style[style] = '';
+        else if (!original[style] || original[style] !== updated[style]){
+          element.style[style] = updated[style];
         }
       }
+
       return;
     }
 
-    element.setAttribute(attribute, value);
-  };
-
-  const removeProp = (element, attribute, value) => {
-    element.removeAttribute(attribute === 'className' ? 'class' : attribute , value);
+    element.setAttribute(attribute, updated);
   };
 
   return {

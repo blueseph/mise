@@ -2,7 +2,7 @@
   "name": "mise",
   "version": "0.0.1",
   "description": "a small, no-frills library to build complex client-side applications and easily manage state",
-  "main": "src/index.js",
+  "main": "dist/mise.js",
   "directories": {
     "example": "example"
   },
