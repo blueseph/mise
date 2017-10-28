@@ -19,7 +19,7 @@ npm i mise
 In your actual project
 
 ```javascript
-import { dom, mise } from 'mise';
+import { dom, component } from 'mise';
 ```
 
 Or, if you prefer to use umd
