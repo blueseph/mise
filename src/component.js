@@ -1,35 +1,18 @@
 import { vdom } from './vdom';
 
-const component = ({template, state, actions, root = document.body}) => {
+const component = ({
+  template, state, actions, root = document.body,
+}) => {
   const VDOM = vdom();
   let appState;
   let appTemplate;
   let appActions;
 
-  const bindUpdateToActions = actions => {
-    const tempActions = {};
+  const generateTemplate = unsafeState => (unsafeActions) => {
+    const readOnlyState = { ...unsafeState };
+    const readOnlyActions = { ...unsafeActions };
 
-    Object.entries(actions).forEach(([key, fn]) => {
-      tempActions[key] = data => {
-        const result = fn(appState, appActions, data);
-
-        if (typeof result === 'function')
-          result(update);
-        else
-          update(result);
-      };
-    });
-
-    return tempActions;
-  };
-
-  const update = partialState => {
-    appState = {
-      ...appState,
-      ...partialState
-    };
-
-    requestRender();
+    return template(readOnlyState)(readOnlyActions);
   };
 
   const render = () => {
@@ -43,19 +26,39 @@ const component = ({template, state, actions, root = document.body}) => {
     requestAnimationFrame(render);
   };
 
-  const init = actions => {
+  const update = (partialState) => {
+    appState = {
+      ...appState,
+      ...partialState,
+    };
+
+    requestRender();
+  };
+
+  const bindUpdateToActions = (unboundActions) => {
+    const tempActions = {};
+
+    for (const [key, fn] of Object.entries(unboundActions)) {
+      tempActions[key] = (data) => {
+        const result = fn(appState, appActions, data);
+
+        if (typeof result === 'function') {
+          result(update);
+        } else {
+          update(result);
+        }
+      };
+    }
+
+    return tempActions;
+  };
+
+  const init = (initialActions) => {
     appState = state;
-    appActions = bindUpdateToActions(actions);
+    appActions = bindUpdateToActions(initialActions);
     appTemplate = generateTemplate(appState)(appActions);
 
     root.appendChild(VDOM.createElement(appTemplate));
-  };
-
-  const generateTemplate = state => actions =>{
-    const readOnlyState = { ...state };
-    const readOnlyActions = { ...actions };
-
-    return template(readOnlyState)(readOnlyActions);
   };
 
   init(actions);

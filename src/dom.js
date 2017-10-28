@@ -3,14 +3,14 @@ const dom = (type, uncheckedProps = {}, ...uncheckedChildren) => {
   let props = uncheckedProps;
 
   for (const child of uncheckedChildren) {
-    if (Array.isArray(child))
-      children = [ ...children, ...child];
-    else
-      children = [ ...children, typeof child === 'number' ? String(child) : child];
+    if (Array.isArray(child)) {
+      children = [...children, ...child];
+    } else {
+      children = [...children, typeof child === 'number' ? String(child) : child];
+    }
   }
 
-  if (uncheckedProps === null)
-    props = {};
+  if (uncheckedProps === null) { props = {}; }
 
   if (props.className) {
     props.class = props.className;
