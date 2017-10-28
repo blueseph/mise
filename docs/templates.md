@@ -18,7 +18,7 @@ const secondary = (props, children) => {
 }
 ```
 
-#####All templates in Mise are presentational templates.
+##### All templates in Mise are presentational templates.
 Templates don't contain actual logic in them. They instead contain references to functions that contain the actual logic. The closest a template will get to logic is to pass in parameters that a function will need.
 
 ```javascript
@@ -31,7 +31,7 @@ const template => state => actions => (
 )
 ```
 
-#####Templates in Mise are composable
+##### Templates in Mise are composable
 
 ```javascript
 const template = state => actions => (
