@@ -59,7 +59,7 @@ component({
     <div>
       <span
         onupdate={
-          el => oldProps => {}
+          el => oldProps => {
             if (oldProps.TTL < state.TTL) {
               actions.updateTTL(state.TTL);
             }
