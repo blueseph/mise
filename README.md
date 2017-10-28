@@ -30,7 +30,9 @@ Or, if you prefer to use umd
 ```
 
 ##### Example
-```
+```javascript
+/** @jsx dom */
+
 import { dom, component } from 'mise';
 
 component({
@@ -51,3 +53,19 @@ component({
   root: document.querySelector('#app'),
 });
 ```
+
+Wanna avoid having to use `/** @jsx dom */` everywhere? Add the `transform-react-jsx` plugin to your webpack config.
+
+```javascript
+{
+  "plugins": {
+    [
+      "transform-react-jsx", {
+        "pragma": "dom",
+      }
+    ]
+  }
+}
+```
+
+You'll still have to `import dom` just like you would `import React`.
