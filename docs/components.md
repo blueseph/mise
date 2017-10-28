@@ -22,6 +22,7 @@ component({
   },
   root: document.querySelector('#app'),
 });
+```
 
 ##### Applications should only have one root-level component.
 
