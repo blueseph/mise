@@ -1,5 +1,7 @@
 # Mise (_en place_)
 
+[![Build Status](https://travis-ci.org/blueseph/mise.svg?branch=develop)](https://travis-ci.org/blueseph/mise)
+
 [Mise](https://en.wikipedia.org/wiki/Mise_en_place) is a fully-featured front-end application library with built-in state management. Mise uses component-based architecture to promote [constructing elegant hierarchies for maximum code reuse and extensibility](http://siliconvalleyism.com/silicon-valley-quote.php?id=206). By explicitly manipulating your state _only_ via actions, code paths are clearly defined and change in predictable ways. Applications lend themselves to being highly and rigorously testable.
 
 Mise has zero dependencies and strives for performance.
@@ -29,6 +31,8 @@ Or, if you prefer to use umd
 </script>
 ```
 
+Mise doesn't require compilation to run, but you won't be able to use JSX until you do.
+
 ##### Example
 ```javascript
 /** @jsx dom */
@@ -54,7 +58,11 @@ component({
 });
 ```
 
-Wanna avoid having to use `/** @jsx dom */` everywhere? Add the `transform-react-jsx` plugin to your webpack config.
+### FAQs
+
+**Do I have to use `/** @jsx dom */` on every file?**
+
+You can add the the `transform-react-jsx` plugin to your webpack config.
 
 ```javascript
 {
@@ -68,4 +76,8 @@ Wanna avoid having to use `/** @jsx dom */` everywhere? Add the `transform-react
 }
 ```
 
-You'll still have to `import dom` just like you would `import React`.
+You'll still have to `import dom` just like you would `import React`, though.
+
+**Why doesn't installing Mise via npm work?**
+
+Mise on npm currently isn't this package. We're trying to hash it out with the current owner of the mise namespace. Sorry for the inconvenience!
