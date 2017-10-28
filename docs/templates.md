@@ -73,14 +73,24 @@ By composing templates, we can keep items compartmentalized and easy to test. Th
 Since Mise components are all pure functions, testing them is simple. We use Jest and strongly suggest that you use it to test Mise.
 
 ```javascript
+import { createElement } from 'mise/src/vdom';
+
 import { template } from './src/todo.template';
 import { actions } from './src/todo.actions';
 import { state } from './src/todo.state';
 
 describe('template test', () => {
-  it('should match the snapshot', () => {
+  const { body } = document;
+  
+  beforeEach(() => {
+    body.innerHTML = '';
+  })
+
+  it('should render a todo ul', () => {
     const result = template(state)(actions);
-    expect(result).toMatchSnapshot();
+    body.appendChild(createElement(result));
+    
+    expect(body.querySelector('ul')).not.toBeNull();
   })
 })
 ```
