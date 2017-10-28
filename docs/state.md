@@ -20,7 +20,7 @@ component({
 
 State is always an object and accessibly in both templates and actions as a parameter.
 
-##### State is Read-Only.
+#### State is Read-Only.
 
 You can't ever directly modify the state.
 
@@ -39,7 +39,7 @@ component({
 })
 ```
 
-##### State can _only_ be modified by actions
+#### State can _only_ be modified by actions
 
 If you want to modify the state of your application, you can do so via an action. Actions must return a new object which is merged with the current state.
 
@@ -60,7 +60,7 @@ component({
 
 In this example, after using the increment action, the new state is `1`. After setting a new state, the application re-renders and generates a new template.
 
-##### Testing
+#### Testing
 Since state is directly modified by actions, testing an action and having it return a new state is a sufficiently good test.
 
 ```javascript
