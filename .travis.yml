@@ -2,8 +2,10 @@ language: node_js
 dist: trusty
 sudo: required
 node_js: 8.8
-install: npm install
+install:
+  - npm install
+  - npm install codecov
 script:
-- npm start
+  - npm start
 after_success:
-- ./bin/codecov -e TRAVIS_NODE_VERSION -f coverage/coverage.json
+  - ./node_modules/.bin/codecov -e TRAVIS_NODE_VERSION -f coverage/coverage.json
