@@ -8,4 +8,4 @@ install:
 script:
   - npm start
 after_success:
-  - ./node_modules/.bin/codecov -e TRAVIS_NODE_VERSION -f coverage/coverage.json
+  - ./node_modules/.bin/codecov -e TRAVIS_NODE_VERSION -f coverage/lcov.info
