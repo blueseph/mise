@@ -1,7 +1,11 @@
+import { getUniques } from './utils';
+
 const vdom = () => {
   const setProp = (element, attribute, original, updated) => {
     if (attribute === 'value') {
-      if (updated || updated === 0 || updated === '') { element[attribute] = updated; }
+      if (updated || updated === 0 || updated === '') {
+        element[attribute] = updated;
+      }
       return;
     }
 
@@ -29,14 +33,12 @@ const vdom = () => {
     }
 
     if (attribute === 'style') {
-      const updatedStyles = updated || {};
-      const originalStyles = original || {};
-      const styles = new Set([...Object.keys(updatedStyles), ...Object.keys(originalStyles)]);
+      const styles = getUniques(updated, original);
 
       for (const style of styles) {
-        if (!updatedStyles[style]) {
+        if (!updated[style]) {
           element.style[style] = '';
-        } else if (!originalStyles[style] || originalStyles[style] !== updatedStyles[style]) {
+        } else if (!original || !original[style] || original[style] !== updated[style]) {
           element.style[style] = updated[style];
         }
       }
@@ -75,8 +77,7 @@ const vdom = () => {
     original.type !== updated.type;
 
   const updateProps = (element, original, updated) => {
-    const merged = [...Object.keys(original), ...Object.keys(updated)];
-    const props = new Set(merged);
+    const props = getUniques(original, updated);
 
     for (const prop of props) {
       setProp(element, prop, original[prop], updated[prop]);

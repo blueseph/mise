@@ -24,6 +24,7 @@ module.exports = {
           message: '`with` is disallowed in strict mode because it makes code impossible to predict and optimize.',
         },
       ],
-      "no-loop-func": "off" /* we create functions within a loop to close over our actions. this is intentional! */
+      "no-loop-func": "off", /* we create functions within a loop to close over our actions. this is intentional! */
+      "linebreak-style": "off", /* we accept those of all line endings */
     }
 };
