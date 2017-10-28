@@ -22,7 +22,7 @@ const actions = {
     const todo = { text: state.input };
     actions.clearInput();
 
-    return { state.todos : [ ...state.todos, todo ] };
+    return { todos : [ ...state.todos, todo ] };
   };
 }
 ```
@@ -42,7 +42,8 @@ component({
     //...
   actions: {
     eventHandler = (state, actions, event) => {
-      console.log(event);
+      if (e.button === 2) {
+      // ...
     }
   }
 })
