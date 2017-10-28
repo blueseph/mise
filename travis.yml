@@ -5,7 +5,7 @@ node_js: 8.5
 install: npm install
 before_script: npm install -g codeclimate-test-reporter
 script:
-- npm run test
+- npm start
 after_script:
   codeclimate-test-reporter < coverage/lcov.info
 addons:
