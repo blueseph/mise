@@ -24,11 +24,10 @@ const component = ({template, state, actions, root = document.body}) => {
   };
 
   const update = partialState => {
-    appState = Object.assign(
-      {},
-      appState,
-      partialState
-    );
+    appState = {
+      ...appState,
+      ...partialState
+    };
 
     requestRender();
   };
@@ -53,8 +52,8 @@ const component = ({template, state, actions, root = document.body}) => {
   };
 
   const generateTemplate = state => actions =>{
-    const readOnlyState = Object.assign({}, state);
-    const readOnlyActions = Object.assign({}, actions);
+    const readOnlyState = { ...state };
+    const readOnlyActions = { ...actions };
 
     return template(readOnlyState)(readOnlyActions);
   };
