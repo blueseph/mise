@@ -1,6 +1,7 @@
 # Mise (_en place_)
 
-[![Build Status](https://travis-ci.org/blueseph/mise.svg?branch=develop)](https://travis-ci.org/blueseph/mise)
+[![Build Status](https://travis-ci.org/blueseph/mise.svg?branch=develop)](https://travis-ci.org/blueseph/mise) [![codebeat badge](https://codebeat.co/badges/e3012ee9-f823-423a-a40b-ca759768952c)](https://codebeat.co/projects/github-com-blueseph-mise-develop)
+
 
 [Mise](https://en.wikipedia.org/wiki/Mise_en_place) is a fully-featured front-end application library with built-in state management. Mise uses component-based architecture to promote [constructing elegant hierarchies for maximum code reuse and extensibility](http://siliconvalleyism.com/silicon-valley-quote.php?id=206). By explicitly manipulating your state _only_ via actions, code paths are clearly defined and change in predictable ways. Applications lend themselves to being highly and rigorously testable.
 
