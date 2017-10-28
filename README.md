@@ -1,6 +1,6 @@
 # Mise (_en place_)
 
-[![Build Status](https://travis-ci.org/blueseph/mise.svg?branch=develop)](https://travis-ci.org/blueseph/mise) [![codebeat badge](https://codebeat.co/badges/e3012ee9-f823-423a-a40b-ca759768952c)](https://codebeat.co/projects/github-com-blueseph-mise-develop) [![codecov](https://codecov.io/gh/blueseph/mise/branch/master/graph/badge.svg)](https://codecov.io/gh/blueseph/mise)
+[![Build Status](https://travis-ci.org/blueseph/mise.svg?branch=develop)](https://travis-ci.org/blueseph/mise) [![codebeat badge](https://codebeat.co/badges/e3012ee9-f823-423a-a40b-ca759768952c)](https://codebeat.co/projects/github-com-blueseph-mise-develop) [![codecov](https://codecov.io/gh/blueseph/mise/branch/develop/graph/badge.svg)](https://codecov.io/gh/blueseph/mise)
 
 
 
