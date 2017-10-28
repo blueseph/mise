@@ -33,7 +33,9 @@ const vdom = () => {
       const styles = new Set(Object.keys(updatedStyles), Object.keys(originalStyles));
 
       for (const style of styles) {
-        if (!updatedStyles[style]) { element.style[style] = ''; } else if (!originalStyles[style] || originalStyles[style] !== updatedStyles[style]) {
+        if (!updatedStyles[style]) {
+          element.style[style] = '';
+        } else if (!originalStyles[style] || originalStyles[style] !== updatedStyles[style]) {
           element.style[style] = updated[style];
         }
       }
@@ -72,15 +74,8 @@ const vdom = () => {
     original.type !== updated.type;
 
   const updateProps = (element, original, updated) => {
-    const props = new Set();
-
-    for (const key of Object.keys(original)) {
-      props.add(key || '');
-    }
-
-    for (const key of Object.keys(updated)) {
-      props.add(key || '');
-    }
+    const merged = [...Object.keys(original), ...Object.keys(updated)];
+    const props = new Set(merged);
 
     for (const prop of props) {
       setProp(element, prop, original[prop], updated[prop]);
