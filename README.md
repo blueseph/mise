@@ -7,7 +7,7 @@ Mise has zero dependencies and strives for performance.
 * VDOM managed updates for fast rendering.
 * Easy state-management.
 * Highly testable.
-* Minimal (2kb minified, 977 bytes gzipped)
+* Minimal (2.25kb minified, 1028 bytes gzipped)
 
 #### Installation (coming soon)
 ```
