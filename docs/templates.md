@@ -18,7 +18,7 @@ const secondary = (props, children) => {
 }
 ```
 
-##### All templates in Mise are presentational templates.
+#### All templates in Mise are presentational templates.
 Templates don't contain actual logic in them. They instead contain references to functions that contain the actual logic. The closest a template will get to logic is to pass in parameters that a function will need.
 
 ```javascript
@@ -31,7 +31,7 @@ const template => state => actions => (
 )
 ```
 
-##### Templates in Mise are composable
+#### Templates in Mise are composable
 
 ```javascript
 const template = state => actions => (
@@ -68,7 +68,7 @@ const TodoItem = ({
 
 By composing templates, we can keep items compartmentalized and easy to test. This also reduces the cognative load of onboarding a new developer - it's easy to see the hierarchy.
 
-##### Testing
+#### Testing
 
 Since Mise components are all pure functions, testing them is simple. We use Jest and strongly suggest that you use it to test Mise.
 
