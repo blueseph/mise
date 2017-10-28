@@ -1,0 +1,13 @@
+language: node_js
+dist: trusty
+sudo: required
+node_js: 8.5
+install: npm install
+before_script: npm install -g codeclimate-test-reporter
+script:
+- npm run test
+after_script:
+  codeclimate-test-reporter < coverage/lcov.info
+addons:
+  code_climate:
+    repo_token: c71aa9bb7e6256fb3ee00c493278cdee430dd746b7314f4d8e74bff8a5cbf53b
