@@ -24,7 +24,7 @@ component({
 });
 ```
 
-##### Applications should only have one root-level component.
+#### Applications should only have one root-level component.
 
 Your application should be structured in a way that only one root level component is ever necessary. Having a single, shared state and a single pool of actions allows you to do some pretty neat things.
 
@@ -34,7 +34,7 @@ Your application should be structured in a way that only one root level componen
 
 It also forces you to keep your templates presentational. The assumption is that basically no logic should ever live in your templates. Templates can thus be really simple to maintain and to test.
 
-##### Root items shouldn't have anything else in them.
+#### Root items shouldn't have anything else in them.
 
 Mise doesn't play nice with others. Please make sure your root items dont get anything added/removed to them. Mise works by diffing a VDOM and applying updates to the real DOM. The real DOM isn't the real source of truth, and as such it's possible for Mise to fall out of sync if the DOM changes out of Mise's purview.
-```
+
