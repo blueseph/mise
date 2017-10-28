@@ -7,8 +7,10 @@
     "example": "example"
   },
   "scripts": {
-    "test": "jest --coverage",
-    "start": "webpack --optimize-minimize"
+    "test": "jest --coverage --verbose",
+    "test:watch": "jest --coverage --verbose --watch",
+    "start": "webpack --optimize-minimize",
+    "build:unoptimized": "webpack"
   },
   "author": "dan b.",
   "license": "MIT",

@@ -37,7 +37,7 @@ const component = ({template, state, actions, root = document.body}) => {
     const oldTemplate = appTemplate;
     appTemplate = generateTemplate(appState)(appActions);
 
-    VDOM.updateDOM(root, oldTemplate, appTemplate);
+    VDOM.update(root, root.childNodes[0], oldTemplate, appTemplate);
   };
 
   const requestRender = () => {
