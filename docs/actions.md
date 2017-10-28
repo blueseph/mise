@@ -9,11 +9,11 @@ const actions = {
 };
 
 ```
-##### State can only be modified by actions.
+#### State can only be modified by actions.
 
 If you intend to modify the state, this needs to be done via an action.  The above example
 
-##### Actions can call other actions.
+#### Actions can call other actions.
 
 ```javascript
 const actions = {
@@ -27,7 +27,7 @@ const actions = {
 }
 ```
 
-##### Actions can take additional parameters.
+#### Actions can take additional parameters.
 
 ```javascript
 import { dom, component } from 'mise';
@@ -49,7 +49,7 @@ component({
 })
 ```
 
-##### Actions can provide thunks
+#### Actions can provide thunks
 > A thunk is a function that encapsulates synchronous or asynchronous code
 
 Thunks allow developers a little leeway into *when* an application should re-render. You can delay a re-render until a certain condition is met via thunks
@@ -65,7 +65,7 @@ const actions = {
 }
 ```
 
-##### Testing
+#### Testing
 
 Testing actions is very straightforward. All actions should strive to be pure functions.
 
