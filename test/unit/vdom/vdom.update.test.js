@@ -22,7 +22,7 @@ describe('update', () => {
     it('should try to run an oncreate function if it exists', () => {
       const create = jest.fn();
 
-      VDOM.update(parent, null, null, dom('h1', { oncreate() { create(); }}));
+      VDOM.update(parent, null, null, dom('h1', { oncreate() { create(); } }));
 
       expect(create.mock.calls.length).toEqual(1);
     });
@@ -41,7 +41,7 @@ describe('update', () => {
       const inner = jest.fn();
       const remove = () => inner;
 
-      VDOM.update(parent, parent.childNodes[0], dom('h1', { onremove() { return remove(); }}), null);
+      VDOM.update(parent, parent.childNodes[0], dom('h1', { onremove() { return remove(); } }), null);
 
       expect(inner.mock.calls.length).toEqual(1);
     });
@@ -62,17 +62,16 @@ describe('update', () => {
       const inner = jest.fn();
       const replace = () => inner;
 
-      VDOM.update(parent, parent.childNodes[0], dom('h1'), dom('h2', { onupdate() { return replace(); }}, []));
+      VDOM.update(parent, parent.childNodes[0], dom('h1'), dom('h2', { onupdate() { return replace(); } }, []));
 
       expect(inner.mock.calls.length).toEqual(1);
     });
   });
 
   describe('updating an element in place', () => {
-
     it('should try to update a basic prop in place', () => {
       const previous = dom('h1');
-      const next = dom('h1', { id: 'great'} );
+      const next = dom('h1', { id: 'great' });
 
       parent.innerHTML = '<h1></h1>';
 
@@ -83,19 +82,19 @@ describe('update', () => {
 
     it('should try intelligently update a boolean value', () => {
       const previous = dom('h1');
-      const next = dom('h1', { disabled: true, id: 'TRUE' } );
+      const next = dom('h1', { disabled: true, id: 'title' });
 
       parent.innerHTML = '<h1></h1>';
 
       VDOM.update(parent, parent.childNodes[0], previous, next);
 
-      expect(parent.innerHTML).toEqual('<h1 disabled=\"true\" id=\"TRUE\"></h1>');
+      expect(parent.innerHTML).toEqual('<h1 disabled=\"true\" id=\"title\"></h1>');
     });
 
     describe('updating styles', () => {
       it('should try to add styles', () => {
         const previous = dom('h1');
-        const next = dom('h1', { style: { fontSize: '18px', }});
+        const next = dom('h1', { style: { fontSize: '18px' } });
 
         parent.innerHTML = '<h1></h1>';
 
@@ -105,8 +104,8 @@ describe('update', () => {
       });
 
       it('should try to swap styles properly', () => {
-        const previous = dom('h1', { style: { textDecoration: 'line-through' }});
-        const next = dom('h1', { style: { fontSize: '18px', }});
+        const previous = dom('h1', { style: { textDecoration: 'line-through' } });
+        const next = dom('h1', { style: { fontSize: '18px' } });
 
         parent.innerHTML = '<h1></h1>';
 
@@ -116,8 +115,8 @@ describe('update', () => {
       });
 
       it('should try to update style values if the property is the same', () => {
-        const previous = dom('h1', { style: { fontSize: '20px' }});
-        const next = dom('h1', { style: { fontSize: '18px', }});
+        const previous = dom('h1', { style: { fontSize: '20px' } });
+        const next = dom('h1', { style: { fontSize: '18px' } });
 
         parent.innerHTML = '<h1></h1>';
 
@@ -127,7 +126,7 @@ describe('update', () => {
       });
 
       it('should try to remove styles properly', () => {
-        const previous = dom('h1', { style: { textDecoration: 'line-through' }});
+        const previous = dom('h1', { style: { textDecoration: 'line-through' } });
         const next = dom('h1');
 
         parent.innerHTML = '<h1></h1>';
@@ -135,6 +134,17 @@ describe('update', () => {
         VDOM.update(parent, parent.childNodes[0], previous, next);
 
         expect(parent.innerHTML).toEqual('<h1></h1>');
+      });
+
+      it('should trigger an onupdate function when diffing props', () => {
+        parent.innerHTML = '<h1></h1>';
+
+        const inner = jest.fn();
+        const replace = () => inner;
+
+        VDOM.update(parent, parent.childNodes[0], dom('h1'), dom('h1', { onupdate() { return replace(); } }, []));
+
+        expect(inner.mock.calls.length).toEqual(1);
       });
     });
   });

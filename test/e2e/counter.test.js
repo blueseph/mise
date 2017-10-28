@@ -14,10 +14,12 @@ describe('counter example', () => {
       template: state => actions =>
         dom('div', null, [
 
-          dom('span', {
-            id: 'counter',
-          },
-          state.counter),
+          dom(
+            'span', {
+              id: 'counter',
+            },
+            state.counter,
+          ),
 
           dom('button', {
             id: 'up',
@@ -39,7 +41,7 @@ describe('counter example', () => {
       actions: {
         increment: state => ({ counter: state.counter + 1 }),
         decrement: state => ({ counter: state.counter - 1 }),
-      }
+      },
     });
 
     body = document.body;
@@ -56,7 +58,7 @@ describe('counter example', () => {
     expect(count.innerHTML).toEqual('0');
   });
 
-  it('should respond correctly to an increment action', done => {
+  it('should respond correctly to an increment action', (done) => {
     up.click();
 
     requestAnimationFrame(() => {
@@ -65,7 +67,7 @@ describe('counter example', () => {
     });
   });
 
-  it('should respond correctly to an decrement action', done => {
+  it('should respond correctly to an decrement action', (done) => {
     down.click();
 
     requestAnimationFrame(() => {

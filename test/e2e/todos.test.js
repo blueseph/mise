@@ -2,35 +2,39 @@ import { dom, component } from '../../src';
 
 window.requestAnimationFrame = setTimeout;
 
-const TodoItem = ({ id, text, done, toggle, clear, create, remove, update }) =>
+const TodoItem = ({
+  id, text, done, toggle, clear, create, remove, update,
+}) =>
   dom(
     'li',
     {
       oncreate: create,
       onremove: remove,
-      onupdate: update },
+      onupdate: update,
+    },
     dom(
       'div',
       {
         onclick: function onclick() {
-          return toggle({ id: id });
+          return toggle({ id });
         },
-        style: done ? { textDecoration: 'line-through' } : {} },
-      text
+        style: done ? { textDecoration: 'line-through' } : {},
+      },
+      text,
     ),
     dom(
       'span',
       {
         onclick: function onclick() {
-          return clear({ id: id });
+          return clear({ id });
         },
         style: {
           marginLeft: '10px',
           color: 'red',
         },
       },
-      'x'
-    )
+      'x',
+    ),
   );
 
 describe('counter example', () => {
@@ -51,7 +55,7 @@ describe('counter example', () => {
           dom(
             'h1',
             null,
-            'Todos'
+            'Todos',
           ),
           dom(
             'ul',
@@ -59,37 +63,37 @@ describe('counter example', () => {
               id: 'todos',
               className: 'todos',
             },
-            state.todos.map(function (todo) {
-              return dom(TodoItem, {
-                create: function create() {
+            state.todos.map(todo => dom(TodoItem, {
+              create: function create() {
 
-                },
-                remove: function remove() {
-                  return function (done) {
-                    done();
-                  };
-                },
-                update: function update() {},
-                text: todo.text,
-                id: todo.id,
-                done: todo.done,
-                toggle: actions.toggle,
-                clear: actions.remove });
-            })
+              },
+              remove: function remove() {
+                return function finish(done) {
+                  done();
+                };
+              },
+              update: function update() {},
+              text: todo.text,
+              id: todo.id,
+              done: todo.done,
+              toggle: actions.toggle,
+              clear: actions.remove,
+            })),
           ),
           dom('input', {
             type: 'text',
             value: state.input,
             oninput: function oninput(e) {
               return actions.input({ value: e.target.value });
-            } }),
+            },
+          }),
           dom(
             'button',
             {
               onclick: actions.add,
               id: 'add',
             },
-            'Add Todo'
+            'Add Todo',
           ),
           dom(
             'button',
@@ -97,8 +101,8 @@ describe('counter example', () => {
               onclick: actions.clearTodos,
               id: 'clear',
             },
-            'Clear All Todos'
-          )
+            'Clear All Todos',
+          ),
         )
       ),
       state: {
@@ -117,18 +121,19 @@ describe('counter example', () => {
                 text,
                 id: state.id,
                 done: false,
-              }
+              },
             ],
             id: state.id + 1,
           };
         },
         input: (state, actions, { value }) => ({ input: value }),
         toggle: (state, actions, { id }) => ({
-          todos: state.todos.map(todo => todo.id === id ? Object.assign({}, todo, { done: !todo.done }) : todo),
+          todos: state.todos.map(todo => (
+            todo.id === id ? { ...todo, done: !todo.done } : todo)),
         }),
-        remove: (state, actions, { id }) => ({ todos: state.todos.filter(todo => todo.id !== id )}),
+        remove: (state, actions, { id }) => ({ todos: state.todos.filter(todo => todo.id !== id) }),
         clearInput: () => ({ input: '' }),
-        clearTodos: () => ({ todos : [] }),
+        clearTodos: () => ({ todos: [] }),
       },
     });
 
@@ -136,7 +141,7 @@ describe('counter example', () => {
     todos = body.querySelector('#todos');
     input = body.querySelector('input');
     add = body.querySelector('#add');
-    clear = body.querySelector('#clear') ;
+    clear = body.querySelector('#clear');
   });
 
   it('should load', () => {
@@ -147,6 +152,5 @@ describe('counter example', () => {
     expect(todos.childNodes.length).toBe(0);
   });
 
-  //TODO: complete this
-
+  // TODO: complete this
 });

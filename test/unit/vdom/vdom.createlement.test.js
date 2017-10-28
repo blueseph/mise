@@ -26,7 +26,7 @@ describe('create element', () => {
         dom('li', null, 'first'),
         dom('li', null, 'second'),
         dom('li', null, 'third'),
-      ]
+      ],
     );
 
     const element = VDOM.createElement(node);
@@ -35,7 +35,7 @@ describe('create element', () => {
   });
 
   it('should properly add props', () => {
-    const element = VDOM.createElement(dom('div', { id: 'neato-element', }));
+    const element = VDOM.createElement(dom('div', { id: 'neato-element' }));
 
     expect(element.outerHTML).toEqual('<div id=\"neato-element\"></div>');
   });

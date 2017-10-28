@@ -10,20 +10,20 @@ describe('component tests', () => {
       template: state => actions =>
         dom('div', null, [
           dom('span', { id: 'text' }, state.text),
-          dom('button', { id:'update', onclick() { actions.update(); }}),
-          dom('button', { id: 'async', onclick() { actions.asyncUpdate(); }}),
+          dom('button', { id: 'update', onclick() { actions.update(); } }),
+          dom('button', { id: 'async', onclick() { actions.asyncUpdate(); } }),
         ]),
       state: {
         text: 'hello, world',
       },
       actions: {
-        update: state => ({ text: state.text + '!' }),
-        asyncUpdate: state => update => {
+        update: state => ({ text: `${state.text}!` }),
+        asyncUpdate: state => (update) => {
           setTimeout(() => {
-            update({ text: state.text + '!!' });
+            update({ text: `${state.text}!!` });
           }, 500);
         },
-      }
+      },
     });
   });
 
@@ -35,7 +35,7 @@ describe('component tests', () => {
     expect(document.querySelector('#text').innerHTML).toEqual('hello, world');
   });
 
-  it('should properly handle an update action', done => {
+  it('should properly handle an update action', (done) => {
     document.querySelector('#update').click();
 
     requestAnimationFrame(() => {
@@ -44,7 +44,7 @@ describe('component tests', () => {
     }, 500);
   });
 
-  it('should handle a thunk', done => {
+  it('should handle a thunk', (done) => {
     document.querySelector('#async').click();
 
     requestAnimationFrame(() => {

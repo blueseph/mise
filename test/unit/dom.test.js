@@ -1,4 +1,4 @@
-import { dom }  from '../../src/';
+import { dom } from '../../src/';
 
 describe('DOM jsx tests', () => {
   it('should be defined', () => {
@@ -82,7 +82,7 @@ describe('DOM jsx tests', () => {
       children: [],
     });
 
-    let props = { id: 'thing', className: 'thing-haver', };
+    const props = { id: 'thing', className: 'thing-haver' };
     element = dom(statelessComponent, props);
 
     expect(element).toEqual({
@@ -91,7 +91,7 @@ describe('DOM jsx tests', () => {
       children: [],
     });
 
-    const secondProps = { id: 'second-thing', className: 'thing-haver', };
+    const secondProps = { id: 'second-thing', className: 'thing-haver' };
     element = dom(statelessComponent, props, [
       dom(statelessComponent, secondProps, []),
     ]);
@@ -104,8 +104,8 @@ describe('DOM jsx tests', () => {
           type: 'div',
           props: secondProps,
           children: [],
-        }
-      ]
+        },
+      ],
     });
   });
 });

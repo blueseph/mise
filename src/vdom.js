@@ -16,10 +16,11 @@ const vdom = () => {
     if (typeof updated === 'function') {
       try {
         element[attribute] = updated;
-        return;
       } catch (e) {
-        return;
+        /* sometimes lifecycle methods throw. we don't particularly care */
       }
+
+      return;
     }
 
     if (!updated || (typeof updated === 'object' && !Object.keys(updated).length)) {
@@ -30,7 +31,7 @@ const vdom = () => {
     if (attribute === 'style') {
       const updatedStyles = updated || {};
       const originalStyles = original || {};
-      const styles = new Set(Object.keys(updatedStyles), Object.keys(originalStyles));
+      const styles = new Set([...Object.keys(updatedStyles), ...Object.keys(originalStyles)]);
 
       for (const style of styles) {
         if (!updatedStyles[style]) {
