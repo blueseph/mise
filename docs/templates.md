@@ -87,6 +87,7 @@ describe('template test', () => {
   })
 
   it('should render a todo ul', () => {
+    /* this is basically what mise does, too! */
     const result = template(state)(actions);
     body.appendChild(createElement(result));
     
