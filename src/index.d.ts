@@ -18,13 +18,3 @@ declare namespace Mise {
     )
   }
 }
-
-
-//just in case??
-export { dom } from './dom';
-export { component } from './component';
-
-
-
-
-
