@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "a small, no-frills library to build complex client-side applications and easily manage state",
   "main": "dist/mise.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blueseph/mise.git"
+  },
   "directories": {
     "example": "example"
   },
@@ -15,9 +19,24 @@
     "lint:fix": "eslint --fix ./src/",
     "start": "npm run lint && npm run test && npm run build"
   },
+  "jest": {
+    "transform": {
+      "^.+\\.(tsx?|jsx?)$": "typescript-babel-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
+  },
   "author": "dan b.",
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "^21.1.5",
+    "awesome-typescript-loader": "^3.2.3",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -29,6 +48,8 @@
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.4.0",
     "jest": "^21.2.1",
+    "typescript": "^2.5.3",
+    "typescript-babel-jest": "^1.0.5",
     "webpack": "^3.8.1"
   }
 }

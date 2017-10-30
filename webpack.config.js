@@ -5,25 +5,35 @@ module.exports = {
   entry: './src/index',
 
   output: {
-    path: path.resolve (__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'mise.js',
     library: 'mise',
     libraryTarget: 'umd',
+    umdNamedDefine: true,
+  },
+
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
 
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
           options: {
             presets: ['env'],
             plugins: [restSpread],
-          }
-        }
-      }
-    ]
-  }
+          },
+        },
+      },
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        loader: 'awesome-typescript-loader',
+      },
+    ],
+  },
 };
