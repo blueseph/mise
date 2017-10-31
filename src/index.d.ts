@@ -3,15 +3,15 @@ export default Mise;
 
 declare namespace Mise {
 
-  export class MiseDomReturnVal {
+  export class VNode {
     type: string | Function;
     props: object;
-    children: Array<string | MiseDomReturnVal>
+    children: Array<string | VNode>
   }
 
-  export class MiseComponent {
+  export class Component {
     constructor(
-      template: (state: any) => (actions: any) => MiseDomReturnVal, 
+      template: (state: any) => (actions: any) => VNode, 
       state: any, 
       actions: any,
       root?: Element
