@@ -130,29 +130,53 @@ const vdom = () => {
     return true;
   };
 
-  const update = (parent, element, previous, next) => {
-    const updated = reconcile(parent, element, previous, next);
+  const beginUpdate = (initialParent, initialElement, initialPrev, initialNext) => {
+    const update = (parent, element, previous, next) => {
+      const updated = reconcile(parent, element, previous, next);
 
-    if (updated) {
-      const prevChildren = previous.children || [];
-      const nextChildren = next.children || [];
-      const length = Math.max(prevChildren.length, nextChildren.length);
-      const childNodes = [...(element && element.childNodes) || []];
+      if (updated) {
+        const prevChildren = previous.children || [];
+        const nextChildren = next.children || [];
+        const length = Math.max(prevChildren.length, nextChildren.length);
+        const childNodes = [...(element && element.childNodes) || []];
+        const childComponents = [];
 
-      for (let i = 0; i < length; i += 1) {
-        update(
-          element,
-          childNodes[i],
-          previous.children[i],
-          next.children[i],
-        );
+        for (let i = 0; i < length; i += 1) {
+          childComponents.push({
+            parentElement: element,
+            element: childNodes[i],
+            prevTemplate: previous.children[i],
+            nextTemplate: next.children[i],
+          });
+        }
+
+        return childComponents;
       }
+
+      return [];
+    };
+
+    let queue = [
+      ...update(initialParent, initialElement, initialPrev, initialNext),
+    ];
+
+    while (queue.length > 0) {
+      const nextComponent = queue.shift();
+      queue = [
+        ...queue,
+        ...update(
+          nextComponent.parentElement,
+          nextComponent.element,
+          nextComponent.prevTemplate,
+          nextComponent.nextTemplate,
+        ),
+      ];
     }
   };
 
   return {
     createElement,
-    update,
+    update: beginUpdate,
   };
 };
 
