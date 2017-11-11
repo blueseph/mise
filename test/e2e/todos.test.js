@@ -1,6 +1,8 @@
 import { dom, component } from '../../src';
+import { requestAnimationFrame, requestIdleCallback } from '../utils';
 
-window.requestAnimationFrame = setTimeout;
+window.requestAnimationFrame = requestAnimationFrame;
+window.requestIdleCallback = requestIdleCallback;
 
 const TodoItem = ({
   id, text, done, toggle, clear, create, remove, update,

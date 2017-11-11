@@ -1,6 +1,17 @@
 import { component, dom } from '../../src';
 
 window.requestAnimationFrame = setTimeout;
+window.requestIdleCallback = function ric(cb) {
+  const start = Date.now();
+  return setTimeout(() => {
+    cb({
+      didTimeout: false,
+      timeRemaining() {
+        return Math.max(0, 50 - (Date.now() - start));
+      },
+    });
+  }, 1);
+};
 
 describe('component tests', () => {
   beforeEach(() => {

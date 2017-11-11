@@ -1,9 +1,9 @@
-import { vdom } from './vdom';
+import { reconciler } from './vdom/reconciler';
 
 const component = ({
   template, state, actions, root = document.body,
 }) => {
-  const VDOM = vdom();
+  const { add } = reconciler();
   let appState;
   let appTemplate;
   let appActions;
@@ -16,10 +16,15 @@ const component = ({
   };
 
   const render = () => {
-    const oldTemplate = appTemplate;
+    const previousTemplate = appTemplate;
     appTemplate = generateTemplate(appState)(appActions);
 
-    VDOM.update(root, root.childNodes[0], oldTemplate, appTemplate);
+    add({
+      parent: root,
+      element: root.childNodes[0],
+      previous: previousTemplate,
+      next: appTemplate,
+    });
   };
 
   const requestRender = () => {
@@ -58,7 +63,10 @@ const component = ({
     appActions = bindUpdateToActions(initialActions);
     appTemplate = generateTemplate(appState)(appActions);
 
-    root.appendChild(VDOM.createElement(appTemplate));
+    add({
+      parent: root,
+      next: appTemplate,
+    });
   };
 
   init(actions);

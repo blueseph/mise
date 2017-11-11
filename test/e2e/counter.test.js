@@ -1,6 +1,9 @@
 import { dom, component } from '../../src';
+import { requestAnimationFrame, requestIdleCallback } from '../utils';
 
-window.requestAnimationFrame = setTimeout;
+window.requestAnimationFrame = requestAnimationFrame;
+window.requestIdleCallback = requestIdleCallback;
+
 describe('counter example', () => {
   let body;
   let count;
