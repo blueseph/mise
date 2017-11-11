@@ -1,9 +1,11 @@
 import { reconciler } from './vdom/reconciler';
+import { vdom } from './vdom/vdom';
 
 const component = ({
   template, state, actions, root = document.body,
 }) => {
-  const { add } = reconciler();
+  const { paint } = vdom();
+  const { add } = reconciler(paint);
   let appState;
   let appTemplate;
   let appActions;

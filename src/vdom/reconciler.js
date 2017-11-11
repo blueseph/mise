@@ -1,7 +1,6 @@
-import { vdom } from './vdom';
 import { fibers, types } from './fiber';
 
-const reconciler = () => {
+const reconciler = (paint) => {
   let inProgress = false;
   let workQueue = [];
   let finished = [];
@@ -10,7 +9,6 @@ const reconciler = () => {
   const next = () => {
     const [item, ...rest] = workQueue;
     workQueue = rest;
-
     return item;
   };
 
@@ -20,15 +18,17 @@ const reconciler = () => {
     previous.type !== updated.type;
 
   const addChildren = (fiber) => {
-    const children = fiber.next.children || fiber.previous.children;
-    if (children) {
-      children.forEach((node, index) => {
-        add(create(
-          fiber.parent.childNodes[index],
-          fiber.previous.children[index],
-          fiber.next.children[index],
-        ));
-      });
+    const prevChildren = fiber.previous.children || [];
+    const nextChildren = fiber.next.children || [];
+    const length = Math.max(prevChildren.length, nextChildren.length);
+
+    for (let i = 0; i < length; i += 1) {
+      add(create(
+        fiber.element,
+        fiber.parent.childNodes[i],
+        fiber.previous.children[i],
+        fiber.next.children[i],
+      ));
     }
   };
 
@@ -84,7 +84,9 @@ const reconciler = () => {
       requestIdleCallback(process);
     } else {
       inProgress = false;
-      requestAnimationFrame(vdom.paint.bind(null, finished));
+
+      const boundPaint = paint.bind(null, finished);
+      requestAnimationFrame(boundPaint);
     }
   };
 

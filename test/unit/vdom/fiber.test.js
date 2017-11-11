@@ -22,6 +22,7 @@ describe('fiber tests', () => {
       } = mockFiber();
 
       const newFiber = fiber.create(
+        parent,
         element,
         previous,
         next,
@@ -42,7 +43,7 @@ describe('fiber tests', () => {
         element,
       } = mockFiber();
 
-      const newFiber = fiber.create(element);
+      const newFiber = fiber.create(parent, element);
 
       expect(newFiber).toEqual({
         element,

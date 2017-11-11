@@ -6,18 +6,18 @@ import { fibers, types } from '../../../src/vdom/fiber';
 
 import { mockFiber } from '../../utils';
 
-const VDOM = vdom();
-
 describe('vdom', () => {
+  const { createElement, paint } = vdom();
+  const { create } = fibers();
   describe('create element', () => {
     it('should create a simple text node', () => {
-      const element = VDOM.createElement('hey');
+      const element = createElement('hey');
 
       expect(element.nodeValue).toEqual('hey');
     });
 
     it('should create an empty div if no data is passed', () => {
-      const element = VDOM.createElement(dom('h1'));
+      const element = createElement(dom('h1'));
 
       expect(element.outerHTML).toEqual('<h1></h1>');
     });
@@ -33,23 +33,18 @@ describe('vdom', () => {
         ],
       );
 
-      const element = VDOM.createElement(node);
+      const element = createElement(node);
 
       expect(element.outerHTML).toEqual('<ul><li>first</li><li>second</li><li>third</li></ul>');
     });
 
     it('should properly add props', () => {
-      const element = VDOM.createElement(dom('div', { id: 'neato-element' }));
+      const element = createElement(dom('div', { id: 'neato-element' }));
       expect(element.outerHTML).toEqual('<div id=\"neato-element\"></div>');
     });
   });
 
   describe('paint', () => {
-    let create;
-    beforeEach(() => {
-      create = fibers().create;
-    });
-
     describe('create', () => {
       it('should create an element if the fiber action is create', () => {
         const lifecycle = jest.fn();
@@ -70,7 +65,7 @@ describe('vdom', () => {
         fiber.action = types.create;
         fiber.lifecycle = lifecycle;
 
-        VDOM.paint([fiber]);
+        paint([fiber]);
 
         const added = parent.querySelector('ul');
         expect(added).toBeDefined();
@@ -96,7 +91,7 @@ describe('vdom', () => {
 
         fiber.action = types.remove;
 
-        VDOM.paint([fiber]);
+        paint([fiber]);
 
         const removed = parent.querySelector('div');
         expect(removed).toBeNull();
@@ -121,7 +116,7 @@ describe('vdom', () => {
         fiber.action = types.remove;
         fiber.lifecycle = lifecycle;
 
-        VDOM.paint([fiber]);
+        paint([fiber]);
 
         expect(inner.mock.calls.length).toEqual(1);
       });
@@ -148,7 +143,7 @@ describe('vdom', () => {
         fiber.action = types.replace;
         fiber.lifecycle = lifecycle;
 
-        VDOM.paint([fiber]);
+        paint([fiber]);
 
         expect(parent.innerHTML).toEqual('<ul class="b"></ul>');
         expect(inner.mock.calls.length).toEqual(1);
@@ -189,7 +184,7 @@ describe('vdom', () => {
         fiber.action = types.update;
         fiber.lifecycle = lifecycle;
 
-        VDOM.paint([fiber]);
+        paint([fiber]);
 
         expect(parent.innerHTML).toEqual('<div class="updated" style="text-decoration: strike-through;"></div>');
         expect(inner.mock.calls.length).toEqual(1);
@@ -221,7 +216,7 @@ describe('vdom', () => {
 
         fiber.action = types.update;
 
-        VDOM.paint([fiber]);
+        paint([fiber]);
 
         expect(parent.innerHTML).toEqual('<div disabled="true"></div>');
       });
@@ -251,7 +246,7 @@ describe('vdom', () => {
 
         fiber.action = types.update;
 
-        VDOM.paint([fiber]);
+        paint([fiber]);
 
         expect(parent.innerHTML).toEqual('<input>');
       });
@@ -286,7 +281,7 @@ describe('vdom', () => {
 
       const finished = [fiber];
 
-      VDOM.paint(finished);
+      paint(finished);
       expect(parent.innerHTML).toBe('<div></div>');
     });
   });

@@ -11,10 +11,10 @@ const fibers = () => {
     empty: true,
   });
 
-  const create = (element, previous = empty(), next = empty()) => ({
+  const create = (parent, element, previous = empty(), next = empty()) => ({
+    parent,
     element,
     type: next.type,
-    parent: element.parentElement,
     previous: previous || empty(),
     next: next || empty(),
   });
