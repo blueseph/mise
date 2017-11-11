@@ -13,12 +13,12 @@ const TodoItem = ({
       onupdate: update,
     },
     dom(
-      'div',
+      'span',
       {
         onclick: function onclick() {
           return toggle({ id });
         },
-        style: done ? { textDecoration: 'line-through' } : {},
+        style: done ? { userSelect: 'none', textDecoration: 'line-through' } : { userSelect: 'none' },
       },
       text,
     ),
@@ -39,10 +39,10 @@ const TodoItem = ({
 
 describe('counter example', () => {
   let body;
-  let todos;
   let input;
   let add;
   let clear;
+  let addTodo;
 
   beforeEach(() => {
     document.body.innerHTML = '';
@@ -72,7 +72,11 @@ describe('counter example', () => {
                   done();
                 };
               },
-              update: function update() {},
+              update: function update() {
+                return function checkOldProps(oldProps) {
+                  //console.log(oldProps);
+                };
+              },
               text: todo.text,
               id: todo.id,
               done: todo.done,
@@ -138,10 +142,16 @@ describe('counter example', () => {
     });
 
     body = document.body;
-    todos = body.querySelector('#todos');
     input = body.querySelector('input');
     add = body.querySelector('#add');
     clear = body.querySelector('#clear');
+
+    addTodo = (text = 'new todo') => {
+      input.value = text;
+
+      input.dispatchEvent(new Event('input'));
+      add.click();
+    };
   });
 
   it('should load', () => {
@@ -149,8 +159,53 @@ describe('counter example', () => {
   });
 
   it('the initial state to not have any todos', () => {
-    expect(todos.childNodes.length).toBe(0);
+    expect(body.querySelector('#todos').childNodes.length).toBe(0);
   });
 
-  // TODO: complete this
+  it('should add a todo', (done) => {
+    addTodo();
+
+    requestAnimationFrame(() => {
+      expect(body.querySelector('#todos').childNodes.length).toBe(1);
+      done();
+    });
+  });
+
+  it('should clear the input after adding a todo', (done) => {
+    addTodo();
+
+    requestAnimationFrame(() => {
+      expect(input.value).toBe('');
+      done();
+    });
+  });
+
+  it('should remove the todo', (done) => {
+    addTodo();
+
+    requestAnimationFrame(() => {
+      body.querySelector('#todos span:last-child').click();
+
+      requestAnimationFrame(() => {
+        expect(body.querySelector('#todos').childNodes.length).toBe(0);
+        done();
+      });
+    });
+  });
+
+  it('should remove all todos', (done) => {
+    addTodo();
+    addTodo();
+    addTodo();
+
+    requestAnimationFrame(() => {
+      expect(body.querySelector('#todos').childNodes.length).toBe(3);
+      clear.click();
+
+      requestAnimationFrame(() => {
+        expect(body.querySelector('#todos').childNodes.length).toBe(0);
+        done();
+      });
+    });
+  });
 });
