@@ -13,7 +13,7 @@ Mise has zero dependencies and strives for performance.
 * Highly testable.
 * Small file size (2.25kb minified, 1028 bytes gzipped)
 
-#### Installation (coming soon)
+#### Installation
 ```
 npm i mise
 ```
@@ -79,7 +79,3 @@ You can add the the `transform-react-jsx` plugin to your webpack config.
 ```
 
 You'll still have to `import dom` just like you would `import React`, though.
-
-**Why doesn't installing Mise via npm work?**
-
-Mise on npm currently isn't this package. We're trying to hash it out with the current owner of the mise namespace. Sorry for the inconvenience!
