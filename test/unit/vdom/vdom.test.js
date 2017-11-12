@@ -4,7 +4,10 @@ import { vdom } from '../../../src/vdom/vdom';
 import { dom } from '../../../src';
 import { fibers, types } from '../../../src/vdom/fiber';
 
-import { mockFiber } from '../../utils';
+import { mockFiber, requestIdleCallback, requestAnimationFrame } from '../../utils';
+
+window.requestIdleCallback = requestIdleCallback;
+window.requestAnimationFrame = requestAnimationFrame;
 
 describe('vdom', () => {
   const { createElement, paint } = vdom();
@@ -57,6 +60,7 @@ describe('vdom', () => {
         } = mockFiber();
 
         const fiber = create(
+          parent,
           element,
           previous,
           next,
@@ -84,6 +88,7 @@ describe('vdom', () => {
         } = mockFiber();
 
         const fiber = create(
+          parent,
           element,
           previous,
           next,
@@ -102,12 +107,14 @@ describe('vdom', () => {
         const lifecycle = () => inner;
 
         const {
+          parent,
           element,
           next,
           previous,
         } = mockFiber();
 
         const fiber = create(
+          parent,
           element,
           previous,
           next,
@@ -135,6 +142,7 @@ describe('vdom', () => {
         } = mockFiber();
 
         const fiber = create(
+          parent,
           element,
           previous,
           next,
@@ -176,6 +184,7 @@ describe('vdom', () => {
         };
 
         const fiber = create(
+          parent,
           element,
           previous,
           next,
@@ -209,6 +218,7 @@ describe('vdom', () => {
         };
 
         const fiber = create(
+          parent,
           element,
           previous,
           next,
@@ -239,6 +249,7 @@ describe('vdom', () => {
         };
 
         const fiber = create(
+          parent,
           element,
           previous,
           next,

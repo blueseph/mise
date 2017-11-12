@@ -72,8 +72,12 @@ const reconciler = (paint) => {
 
   const work = (deadline) => {
     while (deadline.timeRemaining() && workQueue.length) {
-      const completed = reconcile(next());
-      finished = [...finished, completed];
+      try {
+        const completed = reconcile(next());
+        finished = [...finished, completed];
+      } catch (ex) {
+        console.log(ex);
+      }
     }
   };
 

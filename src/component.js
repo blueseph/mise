@@ -1,11 +1,14 @@
 import { reconciler } from './vdom/reconciler';
 import { vdom } from './vdom/vdom';
+import { fibers } from './vdom/fiber';
 
 const component = ({
   template, state, actions, root = document.body,
 }) => {
   const { paint } = vdom();
   const { add } = reconciler(paint);
+  const { create } = fibers();
+
   let appState;
   let appTemplate;
   let appActions;
@@ -65,10 +68,8 @@ const component = ({
     appActions = bindUpdateToActions(initialActions);
     appTemplate = generateTemplate(appState)(appActions);
 
-    add({
-      parent: root,
-      next: appTemplate,
-    });
+    const fiber = create(root, undefined, undefined, appTemplate);
+    add(fiber);
   };
 
   init(actions);
