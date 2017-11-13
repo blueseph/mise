@@ -32,35 +32,47 @@ describe('component tests', () => {
         asyncUpdate: state => (update) => {
           setTimeout(() => {
             update({ text: `${state.text}!!` });
-          }, 500);
+          }, 50);
         },
       },
     });
   });
 
-  it('should properly render', () => {
-    expect(document.body.innerHTML).not.toEqual('');
+  it('should properly render', (done) => {
+    setTimeout(() => {
+      expect(document.body.innerHTML).not.toEqual('');
+
+      done();
+    }, 50);
   });
 
-  it('should properly render the state', () => {
-    expect(document.querySelector('#text').innerHTML).toEqual('hello, world');
+  it('should properly render the state', (done) => {
+    setTimeout(() => {
+      expect(document.querySelector('#text').innerHTML).toEqual('hello, world');
+
+      done();
+    }, 50);
   });
 
   it('should properly handle an update action', (done) => {
-    document.querySelector('#update').click();
+    setTimeout(() => {
+      document.querySelector('#update').click();
 
-    requestAnimationFrame(() => {
-      expect(document.querySelector('#text').innerHTML).toEqual('hello, world!');
-      done();
-    }, 500);
+      setTimeout(() => {
+        expect(document.querySelector('#text').innerHTML).toEqual('hello, world!');
+        done();
+      }, 25);
+    }, 25);
   });
 
   it('should handle a thunk', (done) => {
-    document.querySelector('#async').click();
+    setTimeout(() => {
+      document.querySelector('#async').click();
 
-    requestAnimationFrame(() => {
-      expect(document.querySelector('#text').innerHTML).toEqual('hello, world!!');
-      done();
-    }, 1000);
+      setTimeout(() => {
+        expect(document.querySelector('#text').innerHTML).toEqual('hello, world!!');
+        done();
+      }, 100);
+    }, 25);
   });
 });

@@ -51,9 +51,12 @@ const emptyFiber = {
   empty: true,
 };
 
+const getLastMockCall = mocked => mocked.mock.calls[mocked.mock.calls.length - 1];
+
 export {
   requestIdleCallback,
   requestAnimationFrame,
   mockFiber,
   emptyFiber,
+  getLastMockCall,
 };

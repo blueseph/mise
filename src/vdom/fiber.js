@@ -5,23 +5,26 @@ const types = {
   update: 'UPDATE',
 };
 
-const fibers = () => {
-  const empty = () => ({
-    children: [],
-    empty: true,
-  });
+const empty = () => ({
+  children: [],
+  empty: true,
+});
 
-  const create = (parent, element, previous = empty(), next = empty()) => ({
-    parent,
+const create = ({
+  parent,
+  element = null,
+  previous = empty(),
+  next = empty(),
+}) => ({
+  parent,
+  previous: {
+    tree: previous,
     element,
-    type: next.type,
-    previous: previous || empty(),
-    next: next || empty(),
-  });
+  },
+  next: {
+    tree: next,
+    element: null,
+  },
+});
 
-  return {
-    create,
-  };
-};
-
-export { fibers, types };
+export { create, types };

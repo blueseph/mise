@@ -1,15 +1,9 @@
-import { fibers } from '../../../src/vdom/fiber';
+import { create } from '../../../src/vdom/fiber';
 import { mockFiber, emptyFiber } from '../../utils';
 
 describe('fiber tests', () => {
-  let fiber;
-
-  beforeEach(() => {
-    fiber = fibers();
-  });
-
   it('should exist', () => {
-    expect(fiber).toBeDefined();
+    expect(create).toBeDefined();
   });
 
   describe('creating fibers', () => {
@@ -21,19 +15,23 @@ describe('fiber tests', () => {
         previous,
       } = mockFiber();
 
-      const newFiber = fiber.create(
+      const fiber = create({
         parent,
         element,
         previous,
         next,
-      );
+      });
 
-      expect(newFiber).toEqual({
-        element,
+      expect(fiber).toEqual({
         parent,
-        previous,
-        next,
-        type: next.type,
+        previous: {
+          tree: previous,
+          element,
+        },
+        next: {
+          tree: next,
+          element: null,
+        },
       });
     });
 
@@ -43,14 +41,18 @@ describe('fiber tests', () => {
         element,
       } = mockFiber();
 
-      const newFiber = fiber.create(parent, element);
+      const fiber = create({ parent, element });
 
-      expect(newFiber).toEqual({
-        element,
+      expect(fiber).toEqual({
         parent,
-        type: undefined,
-        next: emptyFiber,
-        previous: emptyFiber,
+        previous: {
+          element,
+          tree: emptyFiber,
+        },
+        next: {
+          element: null,
+          tree: emptyFiber,
+        },
       });
     });
   });

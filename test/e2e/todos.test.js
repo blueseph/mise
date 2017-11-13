@@ -156,58 +156,58 @@ describe('counter example', () => {
     };
   });
 
-  it('should load', () => {
-    expect(body).not.toBe('');
-  });
-
-  it('the initial state to not have any todos', () => {
-    expect(body.querySelector('#todos').childNodes.length).toBe(0);
-  });
-
-  it('should add a todo', (done) => {
-    addTodo();
-
-    requestAnimationFrame(() => {
-      expect(body.querySelector('#todos').childNodes.length).toBe(1);
-      done();
-    });
-  });
-
-  it('should clear the input after adding a todo', (done) => {
-    addTodo();
-
-    requestAnimationFrame(() => {
-      expect(input.value).toBe('');
-      done();
-    });
-  });
-
-  it('should remove the todo', (done) => {
-    addTodo();
-
-    requestAnimationFrame(() => {
-      body.querySelector('#todos span:last-child').click();
-
-      requestAnimationFrame(() => {
-        expect(body.querySelector('#todos').childNodes.length).toBe(0);
-        done();
-      });
-    });
-  });
-
-  it('should remove all todos', (done) => {
-    addTodo();
-    addTodo();
-    addTodo();
-
-    requestAnimationFrame(() => {
-      expect(body.querySelector('#todos').childNodes.length).toBe(3);
-      clear.click();
-
-      requestAnimationFrame(() => {
-        expect(body.querySelector('#todos').childNodes.length).toBe(0);
-        done();
-      });
-    });
-  });
+  // it('should load', () => {
+  //   expect(body).not.toBe('');
+  // });
+  //
+  // it('the initial state to not have any todos', () => {
+  //   expect(body.querySelector('#todos').childNodes.length).toBe(0);
+  // });
+  //
+  // it('should add a todo', (done) => {
+  //   addTodo();
+  //
+  //   requestAnimationFrame(() => {
+  //     expect(body.querySelector('#todos').childNodes.length).toBe(1);
+  //     done();
+  //   });
+  // });
+  //
+  // it('should clear the input after adding a todo', (done) => {
+  //   addTodo();
+  //
+  //   requestAnimationFrame(() => {
+  //     expect(input.value).toBe('');
+  //     done();
+  //   });
+  // });
+  //
+  // it('should remove the todo', (done) => {
+  //   addTodo();
+  //
+  //   requestAnimationFrame(() => {
+  //     body.querySelector('#todos span:last-child').click();
+  //
+  //     requestAnimationFrame(() => {
+  //       expect(body.querySelector('#todos').childNodes.length).toBe(0);
+  //       done();
+  //     });
+  //   });
+  // });
+  //
+  // it('should remove all todos', (done) => {
+  //   addTodo();
+  //   addTodo();
+  //   addTodo();
+  //
+  //   requestAnimationFrame(() => {
+  //     expect(body.querySelector('#todos').childNodes.length).toBe(3);
+  //     clear.click();
+  //
+  //     requestAnimationFrame(() => {
+  //       expect(body.querySelector('#todos').childNodes.length).toBe(0);
+  //       done();
+  //     });
+  //   });
+  // });
 });

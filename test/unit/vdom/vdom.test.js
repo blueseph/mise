@@ -1,8 +1,8 @@
 /* eslint no-useless-escape: 0 */
 
-import { vdom } from '../../../src/vdom/vdom';
+import { createElement, paint } from '../../../src/vdom/vdom';
 import { dom } from '../../../src';
-import { fibers, types } from '../../../src/vdom/fiber';
+import { create, types } from '../../../src/vdom/fiber';
 
 import { mockFiber, requestIdleCallback, requestAnimationFrame } from '../../utils';
 
@@ -10,8 +10,6 @@ window.requestIdleCallback = requestIdleCallback;
 window.requestAnimationFrame = requestAnimationFrame;
 
 describe('vdom', () => {
-  const { createElement, paint } = vdom();
-  const { create } = fibers();
   describe('create element', () => {
     it('should create a simple text node', () => {
       const element = createElement('hey');
@@ -59,15 +57,16 @@ describe('vdom', () => {
           previous,
         } = mockFiber();
 
-        const fiber = create(
+        const fiber = create({
           parent,
           element,
           previous,
           next,
-        );
+        });
 
         fiber.action = types.create;
         fiber.lifecycle = lifecycle;
+        fiber.next.element = createElement(fiber.next.tree);
 
         paint([fiber]);
 
@@ -87,12 +86,12 @@ describe('vdom', () => {
           previous,
         } = mockFiber();
 
-        const fiber = create(
+        const fiber = create({
           parent,
           element,
           previous,
           next,
-        );
+        });
 
         fiber.action = types.remove;
 
@@ -113,12 +112,12 @@ describe('vdom', () => {
           previous,
         } = mockFiber();
 
-        const fiber = create(
+        const fiber = create({
           parent,
           element,
           previous,
           next,
-        );
+        });
 
         fiber.action = types.remove;
         fiber.lifecycle = lifecycle;
@@ -141,15 +140,16 @@ describe('vdom', () => {
           previous,
         } = mockFiber();
 
-        const fiber = create(
+        const fiber = create({
           parent,
           element,
           previous,
           next,
-        );
+        });
 
         fiber.action = types.replace;
         fiber.lifecycle = lifecycle;
+        fiber.next.element = createElement(fiber.next.tree);
 
         paint([fiber]);
 
@@ -183,12 +183,12 @@ describe('vdom', () => {
           },
         };
 
-        const fiber = create(
+        const fiber = create({
           parent,
           element,
           previous,
           next,
-        );
+        });
 
         fiber.action = types.update;
         fiber.lifecycle = lifecycle;
@@ -217,12 +217,12 @@ describe('vdom', () => {
           props: {},
         };
 
-        const fiber = create(
+        const fiber = create({
           parent,
           element,
           previous,
           next,
-        );
+        });
 
         fiber.action = types.update;
 
@@ -293,7 +293,7 @@ describe('vdom', () => {
       const finished = [fiber];
 
       paint(finished);
-      expect(parent.innerHTML).toBe('<div></div>');
+      expect(parent.innerHTML).toEqual('<div></div>');
     });
   });
 });

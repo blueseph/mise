@@ -1,24 +1,28 @@
 import { reconciler } from '../../../src/vdom/reconciler';
-import { fibers, types } from '../../../src/vdom/fiber';
+import { create, types } from '../../../src/vdom/fiber';
+import { paint } from '../../../src/vdom/vdom';
 
-import { mockFiber, requestIdleCallback, requestAnimationFrame } from '../../utils';
+import {
+  mockFiber,
+  requestIdleCallback,
+  requestAnimationFrame,
+  getLastMockCall,
+} from '../../utils';
+
+jest.mock('../../../src/vdom/vdom');
 
 window.requestIdleCallback = requestIdleCallback;
 window.requestAnimationFrame = requestAnimationFrame;
 
 describe('reconciler', () => {
-  let recon;
-  let fiber;
-  let paint;
+  let add;
 
   beforeEach(() => {
-    paint = jest.fn();
-    recon = reconciler(paint);
-    fiber = fibers();
+    add = reconciler().add;
   });
 
   it('should exist', () => {
-    expect(recon).toBeDefined();
+    expect(add).toBeDefined();
   });
 
   it('should replace', (done) => {
@@ -29,22 +33,22 @@ describe('reconciler', () => {
       next,
     } = mockFiber();
 
-    const first = fiber.create(
+    const first = create({
       parent,
       element,
       previous,
       next,
-    );
+    });
 
     next.props.onupdate = () => {};
 
-    recon.add(first);
+    add(first);
 
     setTimeout(() => {
-      expect(paint.mock.calls[0][0][0].action).toBe(types.replace);
-      expect(paint.mock.calls[0][0][0].lifecycle).toBeDefined();
+      expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
+      expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
       done();
-    }, 50);
+    }, 10);
   });
 
   it('should update', (done) => {
@@ -57,22 +61,22 @@ describe('reconciler', () => {
 
     next.type = 'div';
 
-    const first = fiber.create(
+    const first = create({
       parent,
       element,
       previous,
       next,
-    );
+    });
 
     next.props.onupdate = () => {};
 
-    recon.add(first);
+    add(first);
 
     setTimeout(() => {
-      expect(paint.mock.calls[0][0][0].action).toBe(types.update);
-      expect(paint.mock.calls[0][0][0].lifecycle).toBeDefined();
+      expect(getLastMockCall(paint)[0][0].action).toBe(types.update);
+      expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
       done();
-    }, 50);
+    }, 10);
   });
 
   it('should create', (done) => {
@@ -85,20 +89,19 @@ describe('reconciler', () => {
     next.type = 'div';
     next.props.oncreate = () => {};
 
-    const first = fiber.create(
+    const first = create({
       parent,
       element,
-      undefined,
       next,
-    );
+    });
 
-    recon.add(first);
+    add(first);
 
     setTimeout(() => {
-      expect(paint.mock.calls[0][0][0].action).toBe(types.create);
-      expect(paint.mock.calls[0][0][0].lifecycle).toBeDefined();
+      expect(getLastMockCall(paint)[0][0].action).toBe(types.create);
+      expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
       done();
-    }, 50);
+    }, 10);
   });
 
   it('should remove', (done) => {
@@ -108,22 +111,21 @@ describe('reconciler', () => {
       previous,
     } = mockFiber();
 
-    const first = fiber.create(
+    const first = create({
       parent,
       element,
       previous,
-      undefined,
-    );
+    });
 
     previous.props.onremove = () => {};
 
-    recon.add(first);
+    add(first);
 
     setTimeout(() => {
-      expect(paint.mock.calls[0][0][0].action).toBe(types.remove);
-      expect(paint.mock.calls[0][0][0].lifecycle).toBeDefined();
+      expect(getLastMockCall(paint)[0][0].action).toBe(types.remove);
+      expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
       done();
-    }, 50);
+    }, 10);
   });
 
   it('should handle text nodes, too', (done) => {
@@ -135,19 +137,19 @@ describe('reconciler', () => {
     const previous = 'yep';
     const next = 'nope';
 
-    const first = fiber.create(
+    const first = create({
       parent,
       element,
       previous,
       next,
-    );
+    });
 
-    recon.add(first);
+    add(first);
 
     setTimeout(() => {
-      expect(paint.mock.calls[0][0][0].action).toBe(types.replace);
+      expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
       done();
-    }, 50);
+    }, 10);
   });
 
   it('should properly process children', (done) => {
@@ -160,23 +162,23 @@ describe('reconciler', () => {
 
     next.children = [{ ...next }, { ...next }, { ...next }];
 
-    const first = fiber.create(
+    const first = create({
       parent,
       element,
       previous,
       next,
-    );
+    });
 
-    recon.add(first);
+    add(first);
 
     setTimeout(() => {
-      expect(paint.mock.calls[0][0].length).toBe(4);
-      expect(paint.mock.calls[0][0][0].action).toBe(types.replace);
-      expect(paint.mock.calls[0][0][1].action).toBe(types.create);
-      expect(paint.mock.calls[0][0][2].action).toBe(types.create);
-      expect(paint.mock.calls[0][0][3].action).toBe(types.create);
+      expect(getLastMockCall(paint)[0].length).toBe(4);
+      expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
+      expect(getLastMockCall(paint)[0][1].action).toBe(types.create);
+      expect(getLastMockCall(paint)[0][2].action).toBe(types.create);
+      expect(getLastMockCall(paint)[0][3].action).toBe(types.create);
       done();
-    }, 100);
+    }, 10);
   });
 
   it('should request another idle callback if theres too much work to do', (done) => {
@@ -189,17 +191,17 @@ describe('reconciler', () => {
 
     next.children = new Array(2500).fill({ ...next });
 
-    const first = fiber.create(
+    const first = create({
       parent,
       element,
       previous,
       next,
-    );
+    });
 
-    recon.add(first);
+    add(first);
 
     setTimeout(() => {
-      expect(paint.mock.calls[0][0].length).toBe(2501);
+      expect(getLastMockCall(paint)[0].length).toBe(2501);
       done();
     }, 400);
   });

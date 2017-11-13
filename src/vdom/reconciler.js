@@ -1,10 +1,10 @@
-import { fibers, types } from './fiber';
+import { create, types } from './fiber';
+import { createElement, paint } from './vdom';
 
-const reconciler = (paint) => {
+const reconciler = () => {
   let inProgress = false;
   let workQueue = [];
   let finished = [];
-  const { create } = fibers();
 
   const next = () => {
     const [item, ...rest] = workQueue;
@@ -18,53 +18,57 @@ const reconciler = (paint) => {
     previous.type !== updated.type;
 
   const addChildren = (fiber) => {
-    const prevChildren = fiber.previous.children || [];
-    const nextChildren = fiber.next.children || [];
+    const prevChildren = (fiber.previous.tree && fiber.previous.tree.children) || [];
+    const nextChildren = (fiber.next.tree && fiber.next.tree.children) || [];
     const length = Math.max(prevChildren.length, nextChildren.length);
 
     for (let i = 0; i < length; i += 1) {
-      add(create(
-        fiber.element,
-        fiber.parent.childNodes[i],
-        fiber.previous.children[i],
-        fiber.next.children[i],
-      ));
+      add(create({
+        parent: fiber.previous.element,
+        element: (fiber.previous.element && fiber.previous.element.childNodes[i]) || null,
+        previous: prevChildren[i],
+        next: nextChildren[i],
+      }));
     }
   };
 
   const reconcile = (fiber) => {
     addChildren(fiber);
 
-    if (!fiber.previous || fiber.previous.empty) {
+    if (!fiber.previous.tree || fiber.previous.tree.empty) {
       fiber.action = types.create;
-      if (fiber.next.props && fiber.next.props.oncreate) {
-        fiber.lifecycle = fiber.next.props.oncreate;
+      fiber.next.element = createElement(fiber.next.tree);
+
+      if (fiber.next.tree.props && fiber.next.tree.props.oncreate) {
+        fiber.lifecycle = fiber.next.tree.props.oncreate;
       }
 
       return fiber;
     }
 
-    if (!fiber.next || fiber.next.empty) {
+    if (!fiber.next.tree || fiber.next.tree.empty) {
       fiber.action = types.remove;
-      if (fiber.previous.props && fiber.previous.props.onremove) {
-        fiber.lifecycle = fiber.previous.props.onremove;
+      if (fiber.previous.tree.props && fiber.previous.tree.props.onremove) {
+        fiber.lifecycle = fiber.previous.tree.props.onremove;
       }
 
       return fiber;
     }
 
-    if (shouldReplace(fiber.previous, fiber.next)) {
+    if (shouldReplace(fiber.previous.tree, fiber.next.tree)) {
       fiber.action = types.replace;
-      if (fiber.next.props && fiber.next.props.onupdate) {
-        fiber.lifecycle = fiber.next.props.onupdate;
+      fiber.next.element = createElement(fiber.next.tree);
+
+      if (fiber.next.tree.props && fiber.next.tree.props.onupdate) {
+        fiber.lifecycle = fiber.next.tree.props.onupdate;
       }
 
       return fiber;
     }
 
     fiber.action = types.update;
-    if (fiber.next.props && fiber.next.props.onupdate) {
-      fiber.lifecycle = fiber.next.props.onupdate;
+    if (fiber.next.tree.props && fiber.next.tree.props.onupdate) {
+      fiber.lifecycle = fiber.next.tree.props.onupdate;
     }
 
     return fiber;
@@ -72,12 +76,8 @@ const reconciler = (paint) => {
 
   const work = (deadline) => {
     while (deadline.timeRemaining() && workQueue.length) {
-      try {
-        const completed = reconcile(next());
-        finished = [...finished, completed];
-      } catch (ex) {
-        console.log(ex);
-      }
+      const completed = reconcile(next());
+      finished = [...finished, completed];
     }
   };
 
@@ -91,6 +91,8 @@ const reconciler = (paint) => {
 
       const boundPaint = paint.bind(null, finished);
       requestAnimationFrame(boundPaint);
+
+      finished = [];
     }
   };
 
