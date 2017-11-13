@@ -101,7 +101,7 @@ const paint = (fibers) => {
 
       case (types.remove): {
         if (lifecycle) {
-          lifecycle(next.element)(previous.element.remove);
+          lifecycle(next.element)(previous.element.remove.bind(previous.element));
         } else {
           previous.element.remove();
         }

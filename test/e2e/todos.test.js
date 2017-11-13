@@ -42,8 +42,6 @@ const TodoItem = ({
 describe('counter example', () => {
   let body;
   let input;
-  let add;
-  let clear;
   let addTodo;
 
   beforeEach(() => {
@@ -144,7 +142,6 @@ describe('counter example', () => {
     });
 
     body = document.body;
-    clear = body.querySelector('#clear');
 
     addTodo = (text = 'new todo') => {
       input = document.body.querySelector('input');
@@ -206,19 +203,21 @@ describe('counter example', () => {
     }, 25);
   });
 
-  // it('should remove all todos', (done) => {
-  //   addTodo();
-  //   addTodo();
-  //   addTodo();
-  //
-  //   requestAnimationFrame(() => {
-  //     expect(body.querySelector('#todos').childNodes.length).toBe(3);
-  //     clear.click();
-  //
-  //     requestAnimationFrame(() => {
-  //       expect(body.querySelector('#todos').childNodes.length).toBe(0);
-  //       done();
-  //     });
-  //   });
-  // });
+  it('should remove all todos', (done) => {
+    setTimeout(() => {
+      addTodo();
+      addTodo();
+      addTodo();
+
+      setTimeout(() => {
+        expect(body.querySelector('#todos').childNodes.length).toBe(3);
+        body.querySelector('#clear').click();
+
+        setTimeout(() => {
+          expect(body.querySelector('#todos').childNodes.length).toBe(0);
+          done();
+        }, 25);
+      }, 25);
+    }, 25);
+  });
 });

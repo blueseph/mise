@@ -2,7 +2,10 @@ import { reconciler } from './vdom/reconciler';
 import { create } from './vdom/fiber';
 
 const component = ({
-  template, state, actions, root = document.body,
+  template,
+  state,
+  actions,
+  root = document.body,
 }) => {
   const { add } = reconciler();
 
@@ -21,16 +24,14 @@ const component = ({
     const previousTemplate = appTemplate;
     appTemplate = generateTemplate(appState)(appActions);
 
-    add(create({
+    const fiber = create({
       parent: root,
       element: root.childNodes[0],
       previous: previousTemplate,
       next: appTemplate,
-    }));
-  };
+    });
 
-  const requestRender = () => {
-    requestAnimationFrame(render);
+    add(fiber);
   };
 
   const update = (partialState) => {
@@ -39,7 +40,7 @@ const component = ({
       ...partialState,
     };
 
-    requestRender();
+    render();
   };
 
   const bindUpdateToActions = (unboundActions) => {
