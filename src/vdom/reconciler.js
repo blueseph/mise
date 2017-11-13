@@ -23,6 +23,7 @@ const reconciler = () => {
     const length = Math.max(prevChildren.length, nextChildren.length);
 
     for (let i = 0; i < length; i += 1) {
+      // eslint-disable-next-line no-use-before-define
       add(create({
         parent: fiber.previous.element,
         element: (fiber.previous.element && fiber.previous.element.childNodes[i]) || null,
