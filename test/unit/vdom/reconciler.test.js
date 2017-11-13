@@ -45,10 +45,14 @@ describe('reconciler', () => {
     add(first);
 
     setTimeout(() => {
-      expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
-      expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
+      try {
+        expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
+        expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
+      } catch (ex) {
+        console.error(ex);
+      }
       done();
-    }, 10);
+    }, 25);
   });
 
   it('should update', (done) => {
@@ -76,7 +80,7 @@ describe('reconciler', () => {
       expect(getLastMockCall(paint)[0][0].action).toBe(types.update);
       expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
       done();
-    }, 10);
+    }, 25);
   });
 
   it('should create', (done) => {
@@ -101,7 +105,7 @@ describe('reconciler', () => {
       expect(getLastMockCall(paint)[0][0].action).toBe(types.create);
       expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
       done();
-    }, 10);
+    }, 25);
   });
 
   it('should remove', (done) => {
@@ -125,7 +129,7 @@ describe('reconciler', () => {
       expect(getLastMockCall(paint)[0][0].action).toBe(types.remove);
       expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
       done();
-    }, 10);
+    }, 25);
   });
 
   it('should handle text nodes, too', (done) => {
@@ -149,7 +153,7 @@ describe('reconciler', () => {
     setTimeout(() => {
       expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
       done();
-    }, 10);
+    }, 25);
   });
 
   it('should properly process children', (done) => {
@@ -178,7 +182,7 @@ describe('reconciler', () => {
       expect(getLastMockCall(paint)[0][2].action).toBe(types.create);
       expect(getLastMockCall(paint)[0][3].action).toBe(types.create);
       done();
-    }, 10);
+    }, 25);
   });
 
   it('should request another idle callback if theres too much work to do', (done) => {

@@ -23,16 +23,9 @@
     "start": "npm run lint && npm run test && npm run build"
   },
   "jest": {
-    "transform": {
-      "^.+\\.(tsx?|jsx?)$": "typescript-babel-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json"
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/utils.js"
     ]
   },
   "author": "dan b.",
