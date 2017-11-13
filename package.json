@@ -1,6 +1,6 @@
 {
   "name": "mise",
-  "version": "1.0.0",
+  "version": "2.0.1",
   "description": "a small, no-frills library to build complex client-side applications and easily manage state",
   "main": "dist/mise.js",
   "repository": {
@@ -13,14 +13,12 @@
   "scripts": {
     "test": "jest --coverage --verbose",
     "test:watch": "jest --coverage --verbose --watch",
-
     "build": "webpack --optimize-minimize",
     "build:unoptimized": "webpack",
-
     "lint": "eslint ./src/",
     "lint:fix": "eslint --fix ./src/",
-
-    "start": "npm run lint && npm run test && npm run build"
+    "start": "npm run lint && npm run test && npm run build",
+    "prepublish": "npm start"
   },
   "jest": {
     "coveragePathIgnorePatterns": [
