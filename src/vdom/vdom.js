@@ -3,9 +3,7 @@ import { types } from './fiber';
 
 const setProp = (element, attribute, previous, next) => {
   if (attribute === 'value') {
-    if (next || next === 0 || next === '') {
-      element[attribute] = next;
-    }
+    element[attribute] = next;
     return;
   }
 

@@ -20,7 +20,7 @@ const TodoItem = ({
         onclick: function onclick() {
           return toggle({ id });
         },
-        style: done ? { userSelect: 'none', textDecoration: 'line-through' } : { userSelect: 'none' },
+        style: done ? { fontSize: '18px', textDecoration: 'line-through' } : { fontSize: '18px' },
       },
       text,
     ),
@@ -156,7 +156,7 @@ describe('counter example', () => {
     setTimeout(() => {
       expect(body.innerHTML).not.toBe('');
       done();
-    }, 25);
+    }, 100);
   });
 
   it('the initial state to not have any todos', (done) => {
@@ -198,6 +198,46 @@ describe('counter example', () => {
         setTimeout(() => {
           expect(body.querySelector('#todos').childNodes.length).toBe(0);
           done();
+        }, 25);
+      }, 25);
+    }, 25);
+  });
+
+  it('should set the todo to done', (done) => {
+    const firstTodoSpanSelector = '#todos li:first-child span:first-child';
+
+    setTimeout(() => {
+      addTodo();
+
+      setTimeout(() => {
+        body.querySelector(firstTodoSpanSelector).click();
+
+        setTimeout(() => {
+          expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 18px; text-decoration: line-through;">new todo</span>');
+          done();
+        }, 25);
+      }, 25);
+    }, 25);
+  });
+
+  it('should set the todo to done, then unset it', (done) => {
+    const firstTodoSpanSelector = '#todos li:first-child span:first-child';
+
+    setTimeout(() => {
+      addTodo();
+
+      setTimeout(() => {
+        body.querySelector(firstTodoSpanSelector).click();
+
+        setTimeout(() => {
+          expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 18px; text-decoration: line-through;">new todo</span>');
+
+          body.querySelector(firstTodoSpanSelector).click();
+
+          setTimeout(() => {
+            expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 18px;">new todo</span>');
+            done();
+          }, 25);
         }, 25);
       }, 25);
     }, 25);

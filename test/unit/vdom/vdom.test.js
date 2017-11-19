@@ -231,6 +231,38 @@ describe('vdom', () => {
         expect(parent.innerHTML).toEqual('<div disabled="true"></div>');
       });
 
+      it('should try intelligently update a falsy boolean value', () => {
+        const {
+          parent,
+          element,
+        } = mockFiber();
+
+        const next = {
+          type: 'div',
+          props: {
+            disabled: false,
+          },
+        };
+
+        const previous = {
+          type: 'div',
+          props: {},
+        };
+
+        const fiber = create({
+          parent,
+          element,
+          previous,
+          next,
+        });
+
+        fiber.action = types.update;
+
+        paint([fiber]);
+
+        expect(parent.innerHTML).toEqual('<div></div>');
+      });
+
       it('should try to intelligently update a "value" value', () => {
         const parent = document.createElement('div');
         const element = document.createElement('input');
