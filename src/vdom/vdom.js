@@ -90,6 +90,7 @@ const paint = (fibers) => {
     switch (action) {
       case (types.create): {
         parent.appendChild(next.element);
+
         if (lifecycle) {
           lifecycle(next.element);
         }

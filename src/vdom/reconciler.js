@@ -22,14 +22,18 @@ const reconciler = () => {
     const nextChildren = (fiber.next.tree && fiber.next.tree.children) || [];
     const length = Math.max(prevChildren.length, nextChildren.length);
 
-    for (let i = 0; i < length; i += 1) {
-      // eslint-disable-next-line no-use-before-define
-      add(create({
-        parent: fiber.previous.element,
-        element: (fiber.previous.element && fiber.previous.element.childNodes[i]) || null,
-        previous: prevChildren[i],
-        next: nextChildren[i],
-      }));
+    if (fiber.previous.element) {
+      for (let i = 0; i < length; i += 1) {
+        const newFiber = create({
+          parent: fiber.previous.element,
+          element: (fiber.previous.element && fiber.previous.element.childNodes[i]) || null,
+          previous: prevChildren[i],
+          next: nextChildren[i],
+        });
+
+        // eslint-disable-next-line no-use-before-define
+        add(newFiber);
+      }
     }
   };
 

@@ -23,6 +23,13 @@ describe('component tests', () => {
           dom('span', { id: 'text' }, state.text),
           dom('button', { id: 'update', onclick() { actions.update(); } }),
           dom('button', { id: 'async', onclick() { actions.asyncUpdate(); } }),
+          dom('div', null, [
+            dom('div', null, [
+              dom('div', null, [
+                dom('div', null, ['hey']),
+              ]),
+            ]),
+          ]),
         ]),
       state: {
         text: 'hello, world',
