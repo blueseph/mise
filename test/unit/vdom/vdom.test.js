@@ -14,13 +14,13 @@ describe('vdom', () => {
     it('should create a simple text node', () => {
       const element = createElement('hey');
 
-      expect(element.nodeValue).toEqual('hey');
+      expect(element.nodeValue).toBe('hey');
     });
 
     it('should create an empty div if no data is passed', () => {
       const element = createElement(dom('h1'));
 
-      expect(element.outerHTML).toEqual('<h1></h1>');
+      expect(element.outerHTML).toBe('<h1></h1>');
     });
 
     it('should make elements for the children, too', () => {
@@ -36,12 +36,12 @@ describe('vdom', () => {
 
       const element = createElement(node);
 
-      expect(element.outerHTML).toEqual('<ul><li>first</li><li>second</li><li>third</li></ul>');
+      expect(element.outerHTML).toBe('<ul><li>first</li><li>second</li><li>third</li></ul>');
     });
 
     it('should properly add props', () => {
       const element = createElement(dom('div', { id: 'neato-element' }));
-      expect(element.outerHTML).toEqual('<div id=\"neato-element\"></div>');
+      expect(element.outerHTML).toBe('<div id="neato-element"></div>');
     });
   });
 
@@ -72,8 +72,8 @@ describe('vdom', () => {
 
         const added = parent.querySelector('ul');
         expect(added).toBeDefined();
-        expect(added.outerHTML).toBe('<ul class=\"b\"></ul>');
-        expect(lifecycle.mock.calls.length).toEqual(1);
+        expect(added.outerHTML).toBe('<ul class="b"></ul>');
+        expect(lifecycle.mock.calls.length).toBe(1);
       });
     });
 
@@ -124,7 +124,7 @@ describe('vdom', () => {
 
         paint([fiber]);
 
-        expect(inner.mock.calls.length).toEqual(1);
+        expect(inner.mock.calls.length).toBe(1);
       });
     });
 
@@ -153,8 +153,8 @@ describe('vdom', () => {
 
         paint([fiber]);
 
-        expect(parent.innerHTML).toEqual('<ul class="b"></ul>');
-        expect(inner.mock.calls.length).toEqual(1);
+        expect(parent.innerHTML).toBe('<ul class="b"></ul>');
+        expect(inner.mock.calls.length).toBe(1);
       });
     });
 
@@ -195,8 +195,8 @@ describe('vdom', () => {
 
         paint([fiber]);
 
-        expect(parent.innerHTML).toEqual('<div class="updated" style="text-decoration: strike-through;"></div>');
-        expect(inner.mock.calls.length).toEqual(1);
+        expect(parent.innerHTML).toBe('<div class="updated" style="text-decoration: strike-through;"></div>');
+        expect(inner.mock.calls.length).toBe(1);
       });
 
       it('should try intelligently update a boolean value', () => {
@@ -228,7 +228,7 @@ describe('vdom', () => {
 
         paint([fiber]);
 
-        expect(parent.innerHTML).toEqual('<div disabled="true"></div>');
+        expect(parent.innerHTML).toBe('<div disabled="true"></div>');
       });
 
       it('should try intelligently update a falsy boolean value', () => {
@@ -260,7 +260,7 @@ describe('vdom', () => {
 
         paint([fiber]);
 
-        expect(parent.innerHTML).toEqual('<div></div>');
+        expect(parent.innerHTML).toBe('<div></div>');
       });
 
       it('should try to intelligently update a "value" value', () => {
@@ -291,7 +291,7 @@ describe('vdom', () => {
 
         paint([fiber]);
 
-        expect(parent.innerHTML).toEqual('<input>');
+        expect(parent.innerHTML).toBe('<input>');
       });
     });
 
@@ -325,7 +325,7 @@ describe('vdom', () => {
       const finished = [fiber];
 
       paint(finished);
-      expect(parent.innerHTML).toEqual('<div></div>');
+      expect(parent.innerHTML).toBe('<div></div>');
     });
   });
 });

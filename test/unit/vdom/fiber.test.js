@@ -35,7 +35,7 @@ describe('fiber tests', () => {
       });
     });
 
-    it('should handle no elements behind passed into', () => {
+    it('should handle no elements being passed in', () => {
       const {
         parent,
         element,

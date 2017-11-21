@@ -1,19 +1,12 @@
 import { component, dom } from '../../src';
+import { requestAnimationFrame, requestIdleCallback } from '../utils';
 
-window.requestAnimationFrame = setTimeout;
-window.requestIdleCallback = function ric(cb) {
-  const start = Date.now();
-  return setTimeout(() => {
-    cb({
-      didTimeout: false,
-      timeRemaining() {
-        return Math.max(0, 50 - (Date.now() - start));
-      },
-    });
-  }, 1);
-};
+window.requestAnimationFrame = requestAnimationFrame;
+window.requestIdleCallback = requestIdleCallback;
 
 describe('component tests', () => {
+  let body;
+
   beforeEach(() => {
     document.body.innerHTML = '';
 
@@ -43,11 +36,13 @@ describe('component tests', () => {
         },
       },
     });
+
+    body = document.body;
   });
 
   it('should properly render', (done) => {
     setTimeout(() => {
-      expect(document.body.innerHTML).not.toEqual('');
+      expect(body.innerHTML).not.toEqual('');
 
       done();
     }, 50);
@@ -55,7 +50,7 @@ describe('component tests', () => {
 
   it('should properly render the state', (done) => {
     setTimeout(() => {
-      expect(document.querySelector('#text').innerHTML).toEqual('hello, world');
+      expect(body.querySelector('#text').innerHTML).toEqual('hello, world');
 
       done();
     }, 50);
@@ -63,10 +58,10 @@ describe('component tests', () => {
 
   it('should properly handle an update action', (done) => {
     setTimeout(() => {
-      document.querySelector('#update').click();
+      body.querySelector('#update').click();
 
       setTimeout(() => {
-        expect(document.querySelector('#text').innerHTML).toEqual('hello, world!');
+        expect(body.querySelector('#text').innerHTML).toEqual('hello, world!');
         done();
       }, 25);
     }, 25);
@@ -74,10 +69,10 @@ describe('component tests', () => {
 
   it('should handle a thunk', (done) => {
     setTimeout(() => {
-      document.querySelector('#async').click();
+      body.querySelector('#async').click();
 
       setTimeout(() => {
-        expect(document.querySelector('#text').innerHTML).toEqual('hello, world!!');
+        expect(body.querySelector('#text').innerHTML).toEqual('hello, world!!');
         done();
       }, 100);
     }, 25);

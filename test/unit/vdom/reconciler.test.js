@@ -45,12 +45,9 @@ describe('reconciler', () => {
     add(first);
 
     setTimeout(() => {
-      try {
-        expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
-        expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
-      } catch (ex) {
-        console.error(ex);
-      }
+      expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
+      expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
+
       done();
     }, 25);
   });
@@ -64,6 +61,7 @@ describe('reconciler', () => {
     } = mockFiber();
 
     next.type = 'div';
+    next.props.onupdate = () => {};
 
     const first = create({
       parent,
@@ -71,8 +69,6 @@ describe('reconciler', () => {
       previous,
       next,
     });
-
-    next.props.onupdate = () => {};
 
     add(first);
 
