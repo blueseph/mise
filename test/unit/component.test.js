@@ -6,9 +6,13 @@ window.requestIdleCallback = requestIdleCallback;
 
 describe('component tests', () => {
   let body;
+  let middleware;
+  let middlewareFn;
 
   beforeEach(() => {
     document.body.innerHTML = '';
+    middlewareFn = jest.fn(x => x);
+    middleware = () => () => middlewareFn;
 
     component({
       template: state => actions =>
@@ -35,6 +39,7 @@ describe('component tests', () => {
           }, 50);
         },
       },
+      middleware: [middleware],
     });
 
     body = document.body;
@@ -75,6 +80,16 @@ describe('component tests', () => {
         expect(body.querySelector('#text').innerHTML).toEqual('hello, world!!');
         done();
       }, 100);
+    }, 25);
+  });
+
+  it('should support middleware', (done) => {
+    setTimeout(() => {
+      body.querySelector('#update').click();
+      setTimeout(() => {
+        expect(middlewareFn).toHaveBeenCalled();
+        done();
+      }, 25);
     }, 25);
   });
 });

@@ -1,11 +1,13 @@
 import { reconciler } from './vdom/reconciler';
 import { create } from './vdom/fiber';
+import { compose } from './utils';
 
 const component = ({
   template,
   state,
   actions,
   root = document.body,
+  middleware = [],
 }) => {
   const { add } = reconciler();
 
@@ -48,7 +50,12 @@ const component = ({
 
     for (const [key, fn] of Object.entries(unboundActions)) {
       tempActions[key] = (data) => {
-        const result = fn(appState, appActions, data);
+        const boundFn = fn.bind(null, appState, appActions);
+
+        const middlewares = middleware.map(m => m(appState)(key));
+        const composedFn = compose(...middlewares)(boundFn);
+
+        const result = composedFn(data);
 
         if (typeof result === 'function') {
           result(update);
