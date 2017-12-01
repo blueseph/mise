@@ -16,19 +16,19 @@ Mise has zero dependencies and strives for performance.
 
 #### Installation
 ```
-npm i mise
+npm i @mise/core
 ```
 
 In your actual project
 
 ```javascript
-import { dom, component } from 'mise';
+import { dom, component } from '@mise/core';
 ```
 
 Or, if you prefer to use umd
 
 ```javascript
-<script async src="https://unpkg.com/mise"></script>
+<script async src="https://unpkg.com/@mise/core"></script>
 <script type="javascript">
   const { dom, component } = mise;
 </script>
@@ -40,7 +40,7 @@ Mise doesn't require compilation to run, but you won't be able to use JSX until 
 ```javascript
 /** @jsx dom */
 
-import { dom, component } from 'mise';
+import { dom, component } from '@mise/core';
 
 component({
   template: state => actions => (

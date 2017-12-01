@@ -5,7 +5,7 @@ State has proven to be a pain-point in more traditional frameworks, so we've wor
 Every component takes an initial state as one of the required parameters
 
 ```javascript
-import { dom, component } from 'mise';
+import { dom, component } from '@mise/core';
 
 component({
   template:

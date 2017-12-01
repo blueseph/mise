@@ -3,7 +3,7 @@
 Components are how Mise wires together the template, state, and actions to render your application.
 
 ```javascript
-import { dom, component } from 'mise';
+import { dom, component } from '@mise/core';
 
 component({
   template: state => actions => (
