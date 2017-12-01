@@ -65,7 +65,7 @@ component({
 
 **Do I have to use `/** @jsx dom */` on every file?**
 
-You can add the the `transform-react-jsx` plugin to your webpack config.
+You can add the the `transform-react-jsx` plugin to your .babelrc.
 
 ```javascript
 {
