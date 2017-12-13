@@ -11,7 +11,25 @@ const actions = {
 ```
 #### State can only be modified by actions.
 
-If you intend to modify the state, this needs to be done via an action.  The above example
+If you intend to modify the state, this needs to be done via an action.  Using the above example as a reference.
+
+```js
+  component({
+    template: state => actions => (
+      <div>
+        <span>{state.counter}</span>
+        <button onclick={actions.increment}>+</button>
+        <button onclick={actions.decrement}>-</button>
+      </div>
+    ),
+    actions,
+    state: {
+      counter: 0
+    },
+  });
+```
+
+By clicking the increment button, the increment action is dispatched and the state itself is updated. This is the **only** way to modify an application's state.
 
 #### Actions can call other actions.
 
@@ -73,6 +91,7 @@ Testing actions is very straightforward. All actions should strive to be pure fu
 import { actions } from './todos.actions';
 
 let state = {};
+
 beforeEach(
   state = {};
 )
