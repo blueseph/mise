@@ -26,5 +26,9 @@ module.exports = {
       ],
       "no-loop-func": "off", /* we create functions within a loop to close over our actions. this is intentional! */
       "linebreak-style": "off", /* we accept those of all line endings */
+      "react/prop-types": "off", /* we dont deal with proptypes, sorry */
+      "react/react-in-jsx-scope": "off", /* sadly we're not react */
+      "react/no-unknown-property": "off", /* ^ */
+      "jsx-a11y/heading-has-content": "off" /* these are just for testing */
     }
 };

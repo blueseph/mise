@@ -14,20 +14,31 @@ describe('component tests', () => {
     middlewareFn = jest.fn(x => x);
     middleware = () => () => middlewareFn;
 
+    const template = state => actions => (
+      <div>
+        <span id="text">{state.text}</span>
+        <button
+          id="update"
+          onclick={actions.update}
+        />
+        <button
+          id="async"
+          onclick={actions.asyncUpdate}
+        />
+        <div>
+          <div>
+            <div>
+              <div>
+                hey
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
     component({
-      template: state => actions =>
-        dom('div', null, [
-          dom('span', { id: 'text' }, state.text),
-          dom('button', { id: 'update', onclick() { actions.update(); } }),
-          dom('button', { id: 'async', onclick() { actions.asyncUpdate(); } }),
-          dom('div', null, [
-            dom('div', null, [
-              dom('div', null, [
-                dom('div', null, ['hey']),
-              ]),
-            ]),
-          ]),
-        ]),
+      template,
       state: {
         text: 'hello, world',
       },

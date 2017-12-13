@@ -6,7 +6,7 @@ describe('DOM jsx tests', () => {
   });
 
   it('should properly handle a tag with no children or props', () => {
-    const element = dom('main');
+    const element = <main />;
 
     expect(element).toEqual({
       type: 'main',
@@ -26,8 +26,13 @@ describe('DOM jsx tests', () => {
   });
 
   it('should properly handle a tag with children but no props', () => {
-    const children = ['article', 'aside', 'section'];
-    const element = dom('main', {}, ...children);
+    const children = [<article />, <aside />, <section />];
+
+    const element = (
+      <main>
+        {children}
+      </main>
+    );
 
     expect(element).toEqual({
       type: 'main',
@@ -42,7 +47,7 @@ describe('DOM jsx tests', () => {
       className: 'main-section',
     };
 
-    const element = dom('main', props);
+    const element = <main {...props} />;
 
     expect(element).toEqual({
       type: 'main',
@@ -52,7 +57,11 @@ describe('DOM jsx tests', () => {
   });
 
   it('should handle a child being a number', () => {
-    const element = dom('li', {}, 0);
+    const element = (
+      <li>
+        0
+      </li>
+    );
 
     expect(element).toEqual({
       type: 'li',
@@ -61,20 +70,14 @@ describe('DOM jsx tests', () => {
     });
   });
 
-  it('should properly handle children being an array', () => {
-    const children = ['article', 'aside', 'section'];
-    const element = dom('main', {}, children);
-
-    expect(element).toEqual({
-      type: 'main',
-      props: {},
-      children,
-    });
-  });
-
   it('should handle a function as a type', () => {
-    const statelessComponent = (props, children) => dom('div', props, children);
-    let element = dom(statelessComponent);
+    const StatelessComponent = (props, children) => (
+      <div {...props}>
+        {children}
+      </div>
+    );
+
+    let element = <StatelessComponent />;
 
     expect(element).toEqual({
       type: 'div',
@@ -83,7 +86,7 @@ describe('DOM jsx tests', () => {
     });
 
     const props = { id: 'thing', className: 'thing-haver' };
-    element = dom(statelessComponent, props);
+    element = <StatelessComponent {...props} />;
 
     expect(element).toEqual({
       type: 'div',
@@ -92,9 +95,11 @@ describe('DOM jsx tests', () => {
     });
 
     const secondProps = { id: 'second-thing', className: 'thing-haver' };
-    element = dom(statelessComponent, props, [
-      dom(statelessComponent, secondProps, []),
-    ]);
+    element = (
+      <StatelessComponent {...props}>
+        <StatelessComponent {...secondProps} />
+      </StatelessComponent>
+    );
 
     expect(element).toEqual({
       type: 'div',

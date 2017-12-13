@@ -1,5 +1,3 @@
-/* eslint no-useless-escape: 0 */
-
 import { createElement, paint } from '../../../src/vdom/vdom';
 import { dom } from '../../../src';
 import { create, types } from '../../../src/vdom/fiber';
@@ -18,20 +16,19 @@ describe('vdom', () => {
     });
 
     it('should create an empty div if no data is passed', () => {
-      const element = createElement(dom('h1'));
+      const node = <h1 />;
+      const element = createElement(node);
 
       expect(element.outerHTML).toBe('<h1></h1>');
     });
 
     it('should make elements for the children, too', () => {
-      const node = dom(
-        'ul',
-        null,
-        [
-          dom('li', null, 'first'),
-          dom('li', null, 'second'),
-          dom('li', null, 'third'),
-        ],
+      const node = (
+        <ul>
+          <li>first</li>
+          <li>second</li>
+          <li>third</li>
+        </ul>
       );
 
       const element = createElement(node);
@@ -40,7 +37,10 @@ describe('vdom', () => {
     });
 
     it('should properly add props', () => {
-      const element = createElement(dom('div', { id: 'neato-element' }));
+      const node = <div id="neato-element" />;
+
+      const element = createElement(node);
+
       expect(element.outerHTML).toBe('<div id="neato-element"></div>');
     });
   });

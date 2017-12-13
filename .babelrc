@@ -1,9 +1,26 @@
 {
-  "presets": [["es2015", { "modules": false }]],
+  "presets": [
+      [
+          "env", 
+          { "modules": false }
+      ], 
+      "react"
+  ],
   "env": {
-    "test": {
-      "presets": ["es2015"]
-    }
+      "test": {
+          "presets": ["env", "react"],
+          "plugins": [
+              "babel-plugin-transform-object-rest-spread",
+              ["transform-react-jsx", {
+                  "pragma": "dom"
+              }]
+          ]
+      }
   },
-  "plugins": ["babel-plugin-transform-object-rest-spread"]
+  "plugins": [
+      "babel-plugin-transform-object-rest-spread",
+      ["transform-react-jsx", {
+          "pragma": "dom"
+      }]
+  ]
 }
