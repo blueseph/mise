@@ -6,7 +6,7 @@ describe('DOM jsx tests', () => {
   });
 
   it('should properly handle a tag with no children or props', () => {
-    const element = <main />;
+    const element = dom('main');
 
     expect(element).toEqual({
       type: 'main',
