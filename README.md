@@ -8,7 +8,7 @@
 
 Mise has zero dependencies and strives for performance.
 
-* VDOM managed updates for fast, efficient rendering rendering.
+* VDOM managed updates for fast, efficient rendering.
 * Easy state management.
 * Highly testable.
 * Asynchronous rendering.
