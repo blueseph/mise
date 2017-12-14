@@ -14,11 +14,7 @@ jest.mock('../../../src/vdom/vdom');
 const { render } = commis();
 
 describe('reconciler', () => {
-  let add;
-
-  beforeEach(() => {
-    add = reconciler().add;
-  });
+  const { add } = reconciler();
 
   it('should exist', () => {
     expect(add).toBeDefined();

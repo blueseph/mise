@@ -6,7 +6,7 @@ import { create, types } from '../../../src/vdom/fiber';
 
 import { mockFiber } from '../../utils';
 
-const { render } = commis();
+commis();
 
 describe('vdom', () => {
   describe('create element', () => {
