@@ -1,19 +1,17 @@
+import { commis } from '@mise/test';
+
 import { reconciler } from '../../../src/vdom/reconciler';
 import { create, types } from '../../../src/vdom/fiber';
 import { paint } from '../../../src/vdom/vdom';
 
 import {
   mockFiber,
-  requestIdleCallback,
-  requestAnimationFrame,
   getLastMockCall,
-  render,
 } from '../../utils';
 
 jest.mock('../../../src/vdom/vdom');
 
-window.requestIdleCallback = requestIdleCallback;
-window.requestAnimationFrame = requestAnimationFrame;
+const { render } = commis();
 
 describe('reconciler', () => {
   let add;

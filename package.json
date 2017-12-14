@@ -33,6 +33,7 @@
   "author": "dan b.",
   "license": "MIT",
   "devDependencies": {
+    "@mise/test": "^1.0.2",
     "@types/jest": "^21.1.5",
     "awesome-typescript-loader": "^3.2.3",
     "babel-core": "^6.26.0",

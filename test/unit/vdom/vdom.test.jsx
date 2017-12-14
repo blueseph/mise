@@ -1,11 +1,12 @@
+import { commis } from '@mise/test';
+
 import { createElement, paint } from '../../../src/vdom/vdom';
 import { dom } from '../../../src';
 import { create, types } from '../../../src/vdom/fiber';
 
-import { mockFiber, requestIdleCallback, requestAnimationFrame } from '../../utils';
+import { mockFiber } from '../../utils';
 
-window.requestIdleCallback = requestIdleCallback;
-window.requestAnimationFrame = requestAnimationFrame;
+const { render } = commis();
 
 describe('vdom', () => {
   describe('create element', () => {

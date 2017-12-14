@@ -1,8 +1,7 @@
 import { dom, component } from '../../src';
-import { requestAnimationFrame, requestIdleCallback, render, } from '../utils';
+import { commis } from '@mise/test';
 
-window.requestAnimationFrame = requestAnimationFrame;
-window.requestIdleCallback = requestIdleCallback;
+const { render } = commis();
 
 describe('counter example', () => {
   let body;

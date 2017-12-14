@@ -1,8 +1,8 @@
-import { component, dom } from '../../src';
-import { requestAnimationFrame, requestIdleCallback, render } from '../utils';
+import { commis } from '@mise/test';
 
-window.requestAnimationFrame = requestAnimationFrame;
-window.requestIdleCallback = requestIdleCallback;
+import { component, dom } from '../../src';
+
+const { render } = commis();
 
 describe('component tests', () => {
   let body;

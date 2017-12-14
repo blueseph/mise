@@ -8,8 +8,14 @@
   ],
   "env": {
       "test": {
-          "presets": ["env", "react"],
-          "plugins": [
+        "presets": [
+            [
+                "env", 
+                { "modules": "commonjs" }
+            ], 
+            "react"
+        ],
+        "plugins": [
               "babel-plugin-transform-object-rest-spread",
               ["transform-react-jsx", {
                   "pragma": "dom"
