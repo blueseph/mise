@@ -5,110 +5,81 @@ window.requestAnimationFrame = requestAnimationFrame;
 window.requestIdleCallback = requestIdleCallback;
 
 const TodoItem = ({
-  id, text, done, toggle, clear, create, remove, update,
-}) =>
-  dom(
-    'li',
-    {
-      oncreate: create,
-      onremove: remove,
-      onupdate: update,
-    },
-    dom(
-      'span',
-      {
-        onclick: function onclick() {
-          return toggle({ id });
-        },
-        style: done ? { fontSize: '18px', textDecoration: 'line-through' } : { fontSize: '18px' },
-      },
-      text,
-    ),
-    dom(
-      'span',
-      {
-        onclick: function onclick() {
-          return clear({ id });
-        },
-        style: {
-          marginLeft: '10px',
-          color: 'red',
-        },
-      },
-      'x',
-    ),
-  );
+  id,
+  text,
+  done,
+  toggle,
+  clear,
+  create,
+  remove,
+  update,
+}) => (
+  <li
+    oncreate={create}
+    onremove={remove}
+    onupdate={update}
+  >
+    <span
+      style={done ? { fontSize: "18px", textDecoration: "line-through" } : { fontSize: "18px" }}
+      onclick={_ => toggle({ id })}>
+      {text}
+    </span>
+    <span
+      onclick={_ => clear({ id })}
+      style={{ marginLeft: '10px', color: 'red', }}>
+      x
+    </span>
+  </li>
+);
 
 describe('counter example', () => {
   let body;
   let input;
   let addTodo;
+  const template = state => actions => (
+    <div>
+      <h1>Todos</h1>
+
+      <ul id="todos" className="todos">
+        {state.todos.map(todo => (
+          <TodoItem
+            create={() => {}}
+            remove={() => done => done()}
+            update={() => oldProps => oldProps}
+            text={todo.text}
+            id={todo.id}
+            done={todo.done}
+            toggle={actions.toggle}
+            clear={actions.remove}
+          />
+        ))}
+      </ul>
+
+      <input
+        type="text"
+        value={state.value}
+        oninput={e => actions.input({ value: e.target.value })}
+      />
+      <button
+        id="add"
+        onclick={actions.add}
+      >
+        Add Todo
+      </button>
+      <button
+        id="clear"
+        onclick={actions.clearTodos}
+      >
+        Clear Todos
+      </button>
+    </div>
+  );
 
   beforeEach(() => {
     document.body.innerHTML = '';
 
     component({
-      template: state => actions => (
-        dom(
-          'div',
-          null,
-          dom(
-            'h1',
-            null,
-            'Todos',
-          ),
-          dom(
-            'ul',
-            {
-              id: 'todos',
-              className: 'todos',
-            },
-            state.todos.map(todo => dom(TodoItem, {
-              create: function create() {
-
-              },
-              remove: function remove() {
-                return function finish(done) {
-                  done();
-                };
-              },
-              update: function update() {
-                return function checkOldProps(oldProps) {
-                  return oldProps;
-                };
-              },
-              text: todo.text,
-              id: todo.id,
-              done: todo.done,
-              toggle: actions.toggle,
-              clear: actions.remove,
-            })),
-          ),
-          dom('input', {
-            type: 'text',
-            value: state.input,
-            oninput: function oninput(e) {
-              return actions.input({ value: e.target.value });
-            },
-          }),
-          dom(
-            'button',
-            {
-              onclick: actions.add,
-              id: 'add',
-            },
-            'Add Todo',
-          ),
-          dom(
-            'button',
-            {
-              onclick: actions.clearTodos,
-              id: 'clear',
-            },
-            'Clear All Todos',
-          ),
-        )
-      ),
+      template,
       state: {
         todos: [],
         input: '',
@@ -117,7 +88,9 @@ describe('counter example', () => {
       actions: {
         add: (state, actions) => {
           const text = state.input;
+
           actions.clearInput();
+
           return {
             todos: [
               ...state.todos,
@@ -180,9 +153,8 @@ describe('counter example', () => {
   it('should clear the input after adding a todo', (done) => {
     setTimeout(() => {
       addTodo();
-
       setTimeout(() => {
-        expect(input.value).toBe('');
+        expect(input.value).not.toBe('new todo');
         done();
       }, 25);
     }, 25);

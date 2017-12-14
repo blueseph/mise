@@ -6,35 +6,25 @@ window.requestIdleCallback = requestIdleCallback;
 
 describe('counter example', () => {
   let body;
+  const template = state => actions => (
+    <div>
+      <span id="counter">{state.counter}</span>
+      <button
+        id="up"
+        onclick={actions.increment}
+      />
+      <button
+        id="down"
+        onclick={actions.decrement}
+      />
+    </div>
+  );
 
   beforeEach(() => {
     document.body.innerHTML = '';
 
     component({
-      template: state => actions =>
-        dom('div', null, [
-
-          dom(
-            'span', {
-              id: 'counter',
-            },
-            state.counter,
-          ),
-
-          dom('button', {
-            id: 'up',
-            onclick() {
-              actions.increment();
-            },
-          }),
-
-          dom('button', {
-            id: 'down',
-            onclick() {
-              actions.decrement();
-            },
-          }),
-        ]),
+      template,
       state: {
         counter: 0,
       },
