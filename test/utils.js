@@ -53,10 +53,13 @@ const emptyFiber = {
 
 const getLastMockCall = mocked => mocked.mock.calls[mocked.mock.calls.length - 1];
 
+const render = (timeout = 50) => new Promise(r => setTimeout(r, timeout));
+
 export {
   requestIdleCallback,
   requestAnimationFrame,
   mockFiber,
   emptyFiber,
   getLastMockCall,
+  render,
 };

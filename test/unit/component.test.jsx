@@ -1,5 +1,5 @@
 import { component, dom } from '../../src';
-import { requestAnimationFrame, requestIdleCallback } from '../utils';
+import { requestAnimationFrame, requestIdleCallback, render } from '../utils';
 
 window.requestAnimationFrame = requestAnimationFrame;
 window.requestIdleCallback = requestIdleCallback;
@@ -56,51 +56,37 @@ describe('component tests', () => {
     body = document.body;
   });
 
-  it('should properly render', (done) => {
-    setTimeout(() => {
-      expect(body.innerHTML).not.toEqual('');
-
-      done();
-    }, 50);
+  it('should properly render', async () => {
+    await render();
+    expect(body.innerHTML).not.toEqual('');
   });
 
-  it('should properly render the state', (done) => {
-    setTimeout(() => {
-      expect(body.querySelector('#text').innerHTML).toEqual('hello, world');
-
-      done();
-    }, 50);
+  it('should properly render the state', async () => {
+    await render();
+    expect(body.querySelector('#text').innerHTML).toEqual('hello, world');
   });
 
-  it('should properly handle an update action', (done) => {
-    setTimeout(() => {
-      body.querySelector('#update').click();
+  it('should properly handle an update action', async () => {
+    await render();
+    body.querySelector('#update').click();
 
-      setTimeout(() => {
-        expect(body.querySelector('#text').innerHTML).toEqual('hello, world!');
-        done();
-      }, 25);
-    }, 25);
+    await render();
+    expect(body.querySelector('#text').innerHTML).toEqual('hello, world!');
   });
 
-  it('should handle a thunk', (done) => {
-    setTimeout(() => {
-      body.querySelector('#async').click();
+  it('should handle a thunk', async () => {
+    await render();
+    body.querySelector('#async').click();
 
-      setTimeout(() => {
-        expect(body.querySelector('#text').innerHTML).toEqual('hello, world!!');
-        done();
-      }, 100);
-    }, 25);
+    await render(100);
+    expect(body.querySelector('#text').innerHTML).toEqual('hello, world!!');
   });
 
-  it('should support middleware', (done) => {
-    setTimeout(() => {
-      body.querySelector('#update').click();
-      setTimeout(() => {
-        expect(middlewareFn).toHaveBeenCalled();
-        done();
-      }, 25);
-    }, 25);
+  it('should support middleware', async () => {
+    await render();
+    body.querySelector('#update').click();
+
+    await render();
+    expect(middlewareFn).toHaveBeenCalled();
   });
 });

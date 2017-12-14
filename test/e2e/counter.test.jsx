@@ -1,5 +1,5 @@
 import { dom, component } from '../../src';
-import { requestAnimationFrame, requestIdleCallback } from '../utils';
+import { requestAnimationFrame, requestIdleCallback, render, } from '../utils';
 
 window.requestAnimationFrame = requestAnimationFrame;
 window.requestIdleCallback = requestIdleCallback;
@@ -37,39 +37,29 @@ describe('counter example', () => {
     body = document.body;
   });
 
-  it('should load a counter', (done) => {
-    setTimeout(() => {
-      expect(body.innerHTML).not.toBe('');
-      done();
-    }, 200);
+  it('should load a counter', async () => {
+    await render();
+    expect(body.innerHTML).not.toBe('');
   });
 
-  it('should have the proper initial state attached', (done) => {
-    setTimeout(() => {
-      expect(body.querySelector('#counter').innerHTML).toEqual('0');
-      done();
-    }, 100);
+  it('should have the proper initial state attached', async () => {
+    await render();
+    expect(body.querySelector('#counter').innerHTML).toEqual('0');
   });
 
-  it('should respond correctly to an increment action', (done) => {
-    setTimeout(() => {
-      body.querySelector('#up').click();
+  it('should respond correctly to an increment action', async () => {
+    await render();
+    body.querySelector('#up').click();
 
-      setTimeout(() => {
-        expect(body.querySelector('#counter').innerHTML).toEqual('1');
-        done();
-      }, 100);
-    }, 100);
+    await render();
+    expect(body.querySelector('#counter').innerHTML).toEqual('1');
   });
 
-  it('should respond correctly to an decrement action', (done) => {
-    setTimeout(() => {
-      body.querySelector('#down').click();
+  it('should respond correctly to an decrement action', async () => {
+    await render();
+    body.querySelector('#down').click();
 
-      setTimeout(() => {
-        expect(body.querySelector('#counter').innerHTML).toEqual('-1');
-        done();
-      }, 100);
-    }, 100);
+    await render();
+    expect(body.querySelector('#counter').innerHTML).toEqual('-1');
   });
 });

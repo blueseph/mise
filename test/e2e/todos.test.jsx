@@ -1,5 +1,5 @@
 import { dom, component } from '../../src';
-import { requestAnimationFrame, requestIdleCallback } from '../utils';
+import { requestAnimationFrame, requestIdleCallback, render } from '../utils';
 
 window.requestAnimationFrame = requestAnimationFrame;
 window.requestIdleCallback = requestIdleCallback;
@@ -125,111 +125,86 @@ describe('counter example', () => {
     };
   });
 
-  it('should load', (done) => {
-    setTimeout(() => {
-      expect(body.innerHTML).not.toBe('');
-      done();
-    }, 100);
+  it('should load', async () => {
+    await render();
+    expect(body.innerHTML).not.toBe('');
   });
 
-  it('the initial state to not have any todos', (done) => {
-    setTimeout(() => {
-      expect(body.querySelector('#todos').childNodes.length).toBe(0);
-      done();
-    }, 25);
+  it('the initial state to not have any todos', async () => {
+    await render();
+    expect(body.querySelector('#todos').childNodes.length).toBe(0);
   });
 
-  it('should add a todo', (done) => {
-    setTimeout(() => {
-      addTodo();
+  it('should add a todo', async () => {
+    await render();
+    addTodo();
 
-      setTimeout(() => {
-        expect(body.querySelector('#todos').childNodes.length).toBe(1);
-        done();
-      }, 25);
-    }, 25);
+    await render();
+    expect(body.querySelector('#todos').childNodes.length).toBe(1);
   });
 
-  it('should clear the input after adding a todo', (done) => {
-    setTimeout(() => {
-      addTodo();
-      setTimeout(() => {
-        expect(input.value).not.toBe('new todo');
-        done();
-      }, 25);
-    }, 25);
+  it('should clear the input after adding a todo', async () => {
+    await render();
+    addTodo();
+
+    await render();
+    expect(input.value).not.toBe('new todo');
   });
 
-  it('should remove the todo', (done) => {
-    setTimeout(() => {
-      addTodo();
+  it('should remove the todo', async () => {
+    await render();
+    addTodo();
 
-      setTimeout(() => {
-        body.querySelector('#todos span:last-child').click();
+    await render();
+    body.querySelector('#todos span:last-child').click();
 
-        setTimeout(() => {
-          expect(body.querySelector('#todos').childNodes.length).toBe(0);
-          done();
-        }, 25);
-      }, 25);
-    }, 25);
+    await render();
+    expect(body.querySelector('#todos').childNodes.length).toBe(0);
   });
 
-  it('should set the todo to done', (done) => {
+  it('should set the todo to done', async () => {
     const firstTodoSpanSelector = '#todos li:first-child span:first-child';
 
-    setTimeout(() => {
-      addTodo();
+    await render();
+    addTodo();
 
-      setTimeout(() => {
-        body.querySelector(firstTodoSpanSelector).click();
+    await render();
+    body.querySelector(firstTodoSpanSelector).click();
 
-        setTimeout(() => {
-          expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 18px; text-decoration: line-through;">new todo</span>');
-          done();
-        }, 25);
-      }, 25);
-    }, 25);
+    await render();
+    expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 18px; text-decoration: line-through;">new todo</span>');
   });
 
-  it('should set the todo to done, then unset it', (done) => {
+  it('should set the todo to done, then unset it', async () => {
     const firstTodoSpanSelector = '#todos li:first-child span:first-child';
 
-    setTimeout(() => {
-      addTodo();
+    await render();
+    addTodo();
 
-      setTimeout(() => {
-        body.querySelector(firstTodoSpanSelector).click();
+    await render();
+    body.querySelector(firstTodoSpanSelector).click();
 
-        setTimeout(() => {
-          expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 18px; text-decoration: line-through;">new todo</span>');
+    await render();
+    expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 18px; text-decoration: line-through;">new todo</span>');
 
-          body.querySelector(firstTodoSpanSelector).click();
+    await render();
+    body.querySelector(firstTodoSpanSelector).click();
 
-          setTimeout(() => {
-            expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 18px;">new todo</span>');
-            done();
-          }, 25);
-        }, 25);
-      }, 25);
-    }, 25);
+    await render();
+    expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 18px;">new todo</span>');
   });
 
-  it('should remove all todos', (done) => {
-    setTimeout(() => {
-      addTodo();
-      addTodo();
-      addTodo();
+  it('should remove all todos', async () => {
+    await render();
+    addTodo();
+    addTodo();
+    addTodo();
 
-      setTimeout(() => {
-        expect(body.querySelector('#todos').childNodes.length).toBe(3);
-        body.querySelector('#clear').click();
+    await render();
+    expect(body.querySelector('#todos').childNodes.length).toBe(3);
+    body.querySelector('#clear').click();
 
-        setTimeout(() => {
-          expect(body.querySelector('#todos').childNodes.length).toBe(0);
-          done();
-        }, 25);
-      }, 25);
-    }, 25);
+    await render();
+    expect(body.querySelector('#todos').childNodes.length).toBe(0);
   });
 });
