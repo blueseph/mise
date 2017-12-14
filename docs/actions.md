@@ -35,8 +35,8 @@ By clicking the increment button, the increment action is dispatched and the sta
 
 ```javascript
 const actions = {
-  clearInput = state => ({ input: '' }),
-  submit = (state, actions) => {
+  clearInput: state => ({ input: '' }),
+  submit: (state, actions) => {
     const todo = { text: state.input };
     actions.clearInput();
 
@@ -59,7 +59,7 @@ component({
   state:
     //...
   actions: {
-    eventHandler = (state, actions, event) => {
+    eventHandler: (state, actions, event) => {
       if (e.button === 2) {
       // ...
     }
