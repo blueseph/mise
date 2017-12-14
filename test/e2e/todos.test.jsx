@@ -35,7 +35,15 @@ const TodoItem = ({
 describe('counter example', () => {
   let body;
   let input;
-  let addTodo;
+
+  const addTodo = (text = 'new todo') => {
+    input = document.body.querySelector('input');
+    input.value = text;
+
+    input.dispatchEvent(new Event('input'));
+    body.querySelector('#add').click();
+  };
+
   const template = state => actions => (
     <div>
       <h1>Todos</h1>
@@ -75,7 +83,7 @@ describe('counter example', () => {
     </div>
   );
 
-  beforeEach(() => {
+  beforeEach(async () => {
     document.body.innerHTML = '';
 
     component({
@@ -116,27 +124,18 @@ describe('counter example', () => {
 
     body = document.body;
 
-    addTodo = (text = 'new todo') => {
-      input = document.body.querySelector('input');
-      input.value = text;
-
-      input.dispatchEvent(new Event('input'));
-      body.querySelector('#add').click();
-    };
+    await render();
   });
 
   it('should load', async () => {
-    await render();
     expect(body.innerHTML).not.toBe('');
   });
 
   it('the initial state to not have any todos', async () => {
-    await render();
     expect(body.querySelector('#todos').childNodes.length).toBe(0);
   });
 
   it('should add a todo', async () => {
-    await render();
     addTodo();
 
     await render();
@@ -144,7 +143,6 @@ describe('counter example', () => {
   });
 
   it('should clear the input after adding a todo', async () => {
-    await render();
     addTodo();
 
     await render();
@@ -152,7 +150,6 @@ describe('counter example', () => {
   });
 
   it('should remove the todo', async () => {
-    await render();
     addTodo();
 
     await render();
@@ -165,7 +162,6 @@ describe('counter example', () => {
   it('should set the todo to done', async () => {
     const firstTodoSpanSelector = '#todos li:first-child span:first-child';
 
-    await render();
     addTodo();
 
     await render();
@@ -178,7 +174,6 @@ describe('counter example', () => {
   it('should set the todo to done, then unset it', async () => {
     const firstTodoSpanSelector = '#todos li:first-child span:first-child';
 
-    await render();
     addTodo();
 
     await render();
@@ -195,7 +190,6 @@ describe('counter example', () => {
   });
 
   it('should remove all todos', async () => {
-    await render();
     addTodo();
     addTodo();
     addTodo();

@@ -20,7 +20,7 @@ describe('counter example', () => {
     </div>
   );
 
-  beforeEach(() => {
+  beforeEach(async () => {
     document.body.innerHTML = '';
 
     component({
@@ -35,20 +35,19 @@ describe('counter example', () => {
     });
 
     body = document.body;
+
+    await render();
   });
 
   it('should load a counter', async () => {
-    await render();
     expect(body.innerHTML).not.toBe('');
   });
 
   it('should have the proper initial state attached', async () => {
-    await render();
     expect(body.querySelector('#counter').innerHTML).toEqual('0');
   });
 
   it('should respond correctly to an increment action', async () => {
-    await render();
     body.querySelector('#up').click();
 
     await render();
@@ -56,7 +55,6 @@ describe('counter example', () => {
   });
 
   it('should respond correctly to an decrement action', async () => {
-    await render();
     body.querySelector('#down').click();
 
     await render();

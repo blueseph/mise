@@ -9,7 +9,7 @@ describe('component tests', () => {
   let middleware;
   let middlewareFn;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     document.body.innerHTML = '';
     middlewareFn = jest.fn(x => x);
     middleware = () => () => middlewareFn;
@@ -54,20 +54,19 @@ describe('component tests', () => {
     });
 
     body = document.body;
+
+    await render();
   });
 
   it('should properly render', async () => {
-    await render();
     expect(body.innerHTML).not.toEqual('');
   });
 
   it('should properly render the state', async () => {
-    await render();
     expect(body.querySelector('#text').innerHTML).toEqual('hello, world');
   });
 
   it('should properly handle an update action', async () => {
-    await render();
     body.querySelector('#update').click();
 
     await render();
@@ -75,7 +74,6 @@ describe('component tests', () => {
   });
 
   it('should handle a thunk', async () => {
-    await render();
     body.querySelector('#async').click();
 
     await render(100);
@@ -83,7 +81,6 @@ describe('component tests', () => {
   });
 
   it('should support middleware', async () => {
-    await render();
     body.querySelector('#update').click();
 
     await render();
