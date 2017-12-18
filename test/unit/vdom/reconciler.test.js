@@ -1,31 +1,26 @@
+import { commis } from '@mise/test';
+
 import { reconciler } from '../../../src/vdom/reconciler';
 import { create, types } from '../../../src/vdom/fiber';
 import { paint } from '../../../src/vdom/vdom';
 
 import {
   mockFiber,
-  requestIdleCallback,
-  requestAnimationFrame,
   getLastMockCall,
 } from '../../utils';
 
 jest.mock('../../../src/vdom/vdom');
 
-window.requestIdleCallback = requestIdleCallback;
-window.requestAnimationFrame = requestAnimationFrame;
+const { render } = commis();
 
 describe('reconciler', () => {
-  let add;
-
-  beforeEach(() => {
-    add = reconciler().add;
-  });
+  const { add } = reconciler();
 
   it('should exist', () => {
     expect(add).toBeDefined();
   });
 
-  it('should replace', (done) => {
+  it('should replace', async () => {
     const {
       parent,
       element,
@@ -44,15 +39,12 @@ describe('reconciler', () => {
 
     add(first);
 
-    setTimeout(() => {
-      expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
-      expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
-
-      done();
-    }, 25);
+    await render();
+    expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
+    expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
   });
 
-  it('should update', (done) => {
+  it('should update', async () => {
     const {
       parent,
       element,
@@ -72,14 +64,12 @@ describe('reconciler', () => {
 
     add(first);
 
-    setTimeout(() => {
-      expect(getLastMockCall(paint)[0][0].action).toBe(types.update);
-      expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
-      done();
-    }, 25);
+    await render();
+    expect(getLastMockCall(paint)[0][0].action).toBe(types.update);
+    expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
   });
 
-  it('should create', (done) => {
+  it('should create', async () => {
     const {
       parent,
       element,
@@ -97,14 +87,12 @@ describe('reconciler', () => {
 
     add(first);
 
-    setTimeout(() => {
-      expect(getLastMockCall(paint)[0][0].action).toBe(types.create);
-      expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
-      done();
-    }, 25);
+    await render();
+    expect(getLastMockCall(paint)[0][0].action).toBe(types.create);
+    expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
   });
 
-  it('should remove', (done) => {
+  it('should remove', async () => {
     const {
       parent,
       element,
@@ -121,14 +109,12 @@ describe('reconciler', () => {
 
     add(first);
 
-    setTimeout(() => {
-      expect(getLastMockCall(paint)[0][0].action).toBe(types.remove);
-      expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
-      done();
-    }, 25);
+    await render();
+    expect(getLastMockCall(paint)[0][0].action).toBe(types.remove);
+    expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
   });
 
-  it('should handle text nodes, too', (done) => {
+  it('should handle text nodes, too', async () => {
     const {
       parent,
       element,
@@ -146,13 +132,11 @@ describe('reconciler', () => {
 
     add(first);
 
-    setTimeout(() => {
-      expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
-      done();
-    }, 25);
+    await render();
+    expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
   });
 
-  it('should properly process children', (done) => {
+  it('should properly process children', async () => {
     const {
       parent,
       element,
@@ -171,17 +155,15 @@ describe('reconciler', () => {
 
     add(first);
 
-    setTimeout(() => {
-      expect(getLastMockCall(paint)[0].length).toBe(4);
-      expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
-      expect(getLastMockCall(paint)[0][1].action).toBe(types.create);
-      expect(getLastMockCall(paint)[0][2].action).toBe(types.create);
-      expect(getLastMockCall(paint)[0][3].action).toBe(types.create);
-      done();
-    }, 25);
+    await render();
+    expect(getLastMockCall(paint)[0].length).toBe(4);
+    expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
+    expect(getLastMockCall(paint)[0][1].action).toBe(types.create);
+    expect(getLastMockCall(paint)[0][2].action).toBe(types.create);
+    expect(getLastMockCall(paint)[0][3].action).toBe(types.create);
   });
 
-  it('should request another idle callback if theres too much work to do', (done) => {
+  it('should request another idle callback if theres too much work to do', async () => {
     const {
       parent,
       element,
@@ -200,9 +182,7 @@ describe('reconciler', () => {
 
     add(first);
 
-    setTimeout(() => {
-      expect(getLastMockCall(paint)[0].length).toBe(2501);
-      done();
-    }, 400);
+    await render(500);
+    expect(getLastMockCall(paint)[0].length).toBe(2501);
   });
 });

@@ -4,9 +4,9 @@ import { logger } from './logger';
 import { exception } from './exception';
 
 component({
-  template: state => actions =>(
+  template: state => actions => (
     <main>
-      <button onclick={actions.increment}>I've been clicked {state.clicks} times!</button>
+      <button onclick={actions.increment}>I have been clicked {state.clicks} times!</button>
     </main>
   ),
   state: {

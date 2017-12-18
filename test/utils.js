@@ -1,16 +1,3 @@
-const requestAnimationFrame = setTimeout;
-const requestIdleCallback = function ric(cb) {
-  const start = Date.now();
-  return setTimeout(() => {
-    cb({
-      didTimeout: false,
-      timeRemaining() {
-        return Math.max(0, 50 - (Date.now() - start));
-      },
-    });
-  }, 1);
-};
-
 const mockFiber = () => {
   const parent = document.createElement('div');
   const element = document.createElement('div');
@@ -54,8 +41,6 @@ const emptyFiber = {
 const getLastMockCall = mocked => mocked.mock.calls[mocked.mock.calls.length - 1];
 
 export {
-  requestIdleCallback,
-  requestAnimationFrame,
   mockFiber,
   emptyFiber,
   getLastMockCall,

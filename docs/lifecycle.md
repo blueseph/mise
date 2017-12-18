@@ -65,6 +65,9 @@ component({
             }
           }
         }
+      >
+      {state.TTL}
+      </span>
     </div>
   ),
 });

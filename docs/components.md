@@ -30,7 +30,7 @@ Your application should be structured in a way that only one root level componen
 
 * Load the state of your application from a local storage object
 * Hydrate your SSR application with the proper state
-* Easily automate bug reporting by passing the whole state and the action called.
+* Easily automate bug reporting by passing the whole state and the action called to middleware.
 
 It also forces you to keep your templates presentational. The assumption is that basically no logic should ever live in your templates. Templates can thus be really simple to maintain and to test.
 

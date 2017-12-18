@@ -7,8 +7,8 @@ const add = (state, actions) => {
       {
         text,
         id: state.id,
-        done: false
-      }
+        done: false,
+      },
     ],
     id: state.id + 1,
   };
@@ -17,14 +17,14 @@ const add = (state, actions) => {
 const input = (state, actions, { value }) => ({ input: value });
 
 const toggle = (state, actions, { id }) => ({
-  todos: state.todos.map(todo => todo.id === id ? Object.assign({}, todo, { done: !todo.done }) : todo),
+  todos: state.todos.map(todo => (todo.id === id ? { ...todo, done: !todo.done } : todo)),
 });
 
 const remove = (state, actions, { id }) => ({ todos: state.todos.filter(todo => todo.id !== id )});
 
 const clearInput = () => ({ input: '' });
 
-const clearTodos = () => ({ todos : [] });
+const clearTodos = () => ({ todos: [] });
 
 export {
   add,

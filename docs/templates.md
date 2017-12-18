@@ -93,6 +93,7 @@ describe('template test', () => {
     const expectedResult = (
       <ul>
         <li>Add a Router</li>
+        <li>Add a testing suite</li>
       </ul>
     );
 

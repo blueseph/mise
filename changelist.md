@@ -1,3 +1,7 @@
+# 3.1.0 - Middleware
+
+Mise now has middleware! Middleware's a powerful tool that lets you get right into the action, just as an update's about to occur. You can log out your previous state and action, you can catch any errors, you can even modify the data that gets passed to the action.
+
 # 3.0.0 - Fiber
 
 Mise's architecture now supports asynchronous rendering. What's asynchronous rendering?
