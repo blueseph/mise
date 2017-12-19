@@ -8,11 +8,15 @@ describe('component tests', () => {
   let body;
   let middleware;
   let middlewareFn;
+  let init;
+  let initFn;
 
   beforeEach(async () => {
     document.body.innerHTML = '';
     middlewareFn = jest.fn(x => x);
     middleware = () => () => middlewareFn;
+    init = jest.fn();
+    initFn = () => init;
 
     const template = state => actions => (
       <div>
@@ -51,6 +55,7 @@ describe('component tests', () => {
         },
       },
       middleware: [middleware],
+      init: initFn,
     });
 
     body = document.body;
@@ -60,6 +65,10 @@ describe('component tests', () => {
 
   it('should properly render', async () => {
     expect(body.innerHTML).not.toEqual('');
+  });
+
+  it('should call the init function', () => {
+    expect(init).toHaveBeenCalled();
   });
 
   it('should properly render the state', async () => {

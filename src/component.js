@@ -8,6 +8,7 @@ const component = ({
   actions,
   root = document.body,
   middleware = [],
+  init,
 }) => {
   const { add } = reconciler();
 
@@ -68,9 +69,12 @@ const component = ({
     return tempActions;
   };
 
-  const init = (initialActions) => {
+  const initialize = (initialActions) => {
     appState = state;
     appActions = bindUpdateToActions(initialActions);
+    
+    if (init) init(appState)(appActions);
+
     appTemplate = generateTemplate(appState)(appActions);
 
     const fiber = create({
@@ -81,7 +85,7 @@ const component = ({
     add(fiber);
   };
 
-  init(actions);
+  initialize(actions);
 };
 
 export { component };
