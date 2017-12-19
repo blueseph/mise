@@ -72,7 +72,7 @@ const component = ({
   const initialize = (initialActions) => {
     appState = state;
     appActions = bindUpdateToActions(initialActions);
-    
+
     if (init) init(appState)(appActions);
 
     appTemplate = generateTemplate(appState)(appActions);
