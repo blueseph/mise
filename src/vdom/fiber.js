@@ -3,6 +3,7 @@ const types = {
   remove: 'REMOVE',
   replace: 'REPLACE',
   update: 'UPDATE',
+  skip: 'SKIP',
 };
 
 const empty = () => ({

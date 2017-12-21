@@ -163,7 +163,31 @@ describe('reconciler', () => {
     expect(getLastMockCall(paint)[0][3].action).toBe(types.create);
   });
 
+  it('should handle null elements', async () => {
+    const {
+      parent,
+      element,
+      previous,
+      next,
+    } = mockFiber();
+
+    next.children = [null];
+
+    const first = create({
+      parent,
+      element,
+      previous,
+      next,
+    });
+
+    add(first);
+    await render();
+
+    expect(getLastMockCall(paint)[0].length).toBe(1);
+  });
+
   it('should request another idle callback if theres too much work to do', async () => {
+
     const {
       parent,
       element,

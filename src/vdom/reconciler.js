@@ -38,6 +38,11 @@ const reconciler = () => {
   };
 
   const reconcile = (fiber) => {
+    if (!fiber || (!fiber.previous.tree && fiber.next.tree === null)) {
+      fiber.action = types.skip;
+      return fiber;
+    }
+
     addChildren(fiber);
 
     if (!fiber.previous.tree || fiber.previous.tree.empty) {
@@ -82,7 +87,8 @@ const reconciler = () => {
   const work = (deadline) => {
     while (deadline.timeRemaining() && workQueue.length) {
       const completed = reconcile(next());
-      finished = [...finished, completed];
+      // don't add null elements like null routes to the finished queue for painting.
+      if (completed.action !== types.skip) finished = [...finished, completed];
     }
   };
 
