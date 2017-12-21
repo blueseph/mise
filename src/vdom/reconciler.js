@@ -38,50 +38,52 @@ const reconciler = () => {
   };
 
   const reconcile = (fiber) => {
-    if (!fiber || (!fiber.previous.tree && fiber.next.tree === null)) {
-      fiber.action = types.skip;
-      return fiber;
+    const newFiber = { ...fiber };
+    if ((!fiber.previous.tree || fiber.previous.tree.empty)
+      && (!fiber.next.tree || fiber.next.tree.empty)) {
+      newFiber.action = types.skip;
+      return newFiber;
     }
 
     addChildren(fiber);
 
-    if (!fiber.previous.tree || fiber.previous.tree.empty) {
-      fiber.action = types.create;
-      fiber.next.element = createElement(fiber.next.tree);
+    if (fiber.next && fiber.next.tree && (!fiber.previous.tree || fiber.previous.tree.empty)) {
+      newFiber.action = types.create;
+      newFiber.next.element = createElement(fiber.next.tree);
 
       if (fiber.next.tree.props && fiber.next.tree.props.oncreate) {
-        fiber.lifecycle = fiber.next.tree.props.oncreate;
+        newFiber.lifecycle = fiber.next.tree.props.oncreate;
       }
 
-      return fiber;
+      return newFiber;
     }
 
     if (!fiber.next.tree || fiber.next.tree.empty) {
-      fiber.action = types.remove;
+      newFiber.action = types.remove;
       if (fiber.previous.tree.props && fiber.previous.tree.props.onremove) {
-        fiber.lifecycle = fiber.previous.tree.props.onremove;
+        newFiber.lifecycle = fiber.previous.tree.props.onremove;
       }
 
-      return fiber;
+      return newFiber;
     }
 
     if (shouldReplace(fiber.previous.tree, fiber.next.tree)) {
-      fiber.action = types.replace;
-      fiber.next.element = createElement(fiber.next.tree);
+      newFiber.action = types.replace;
+      newFiber.next.element = createElement(fiber.next.tree);
 
       if (fiber.next.tree.props && fiber.next.tree.props.onupdate) {
-        fiber.lifecycle = fiber.next.tree.props.onupdate;
+        newFiber.lifecycle = fiber.next.tree.props.onupdate;
       }
 
-      return fiber;
+      return newFiber;
     }
 
-    fiber.action = types.update;
+    newFiber.action = types.update;
     if (fiber.next.tree.props && fiber.next.tree.props.onupdate) {
-      fiber.lifecycle = fiber.next.tree.props.onupdate;
+      newFiber.lifecycle = fiber.next.tree.props.onupdate;
     }
 
-    return fiber;
+    return newFiber;
   };
 
   const work = (deadline) => {

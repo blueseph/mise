@@ -171,7 +171,7 @@ describe('reconciler', () => {
       next,
     } = mockFiber();
 
-    next.children = [null];
+    next.children = [null, null, null, null];
 
     const first = create({
       parent,
