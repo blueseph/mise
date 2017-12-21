@@ -31,11 +31,9 @@ describe('component tests', () => {
         />
         <div>
           <div>
-            <div>
-              <div>
-                hey
-              </div>
-            </div>
+            {null}
+            {null}
+            <div />
           </div>
         </div>
       </div>

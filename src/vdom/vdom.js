@@ -54,6 +54,8 @@ const setProps = (element, props) => {
 };
 
 const createElement = (node) => {
+  if (node === null) return false;
+
   if (typeof node === 'string') {
     return document.createTextNode(node);
   }
@@ -64,7 +66,7 @@ const createElement = (node) => {
 
   children
     .map(createElement)
-    .forEach(child => element.appendChild(child));
+    .forEach(child => child && element.appendChild(child));
 
   return element;
 };
