@@ -1,6 +1,6 @@
 import { reconciler } from './vdom/reconciler';
 import { create } from './vdom/fiber';
-import { compose } from './utils';
+import { compose, makeCopy } from './utils';
 
 const component = ({
   template,
@@ -12,13 +12,13 @@ const component = ({
 }) => {
   const { add } = reconciler();
 
-  let appState;
   let appTemplate;
+  let appState;
   let appActions;
 
   const generateTemplate = unsafeState => (unsafeActions) => {
-    const readOnlyState = { ...unsafeState };
-    const readOnlyActions = { ...unsafeActions };
+    const readOnlyState = makeCopy(unsafeState);
+    const readOnlyActions = makeCopy(unsafeActions);
 
     return template(readOnlyState)(readOnlyActions);
   };
@@ -51,9 +51,12 @@ const component = ({
 
     for (const [key, fn] of Object.entries(unboundActions)) {
       tempActions[key] = (data) => {
-        const boundFn = fn.bind(null, appState, appActions);
+        const readOnlyState = makeCopy(appState);
+        const readOnlyActions = makeCopy(appActions);
+        
+        const boundFn = fn.bind(null, readOnlyState, readOnlyActions);
 
-        const middlewares = middleware.map(m => m(appState)(key));
+        const middlewares = middleware.map(m => m(readOnlyState)(key));
         const composedFn = compose(...middlewares)(boundFn);
 
         const result = composedFn(data);
@@ -73,7 +76,10 @@ const component = ({
     appState = state;
     appActions = bindUpdateToActions(initialActions);
 
-    if (init) init(appState)(appActions);
+    const readOnlyState = makeCopy(appState);
+    const readOnlyActions = makeCopy(appActions);
+
+    if (init) init(readOnlyState)(readOnlyActions);
 
     appTemplate = generateTemplate(appState)(appActions);
 

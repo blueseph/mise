@@ -40,6 +40,7 @@ describe('reconciler', () => {
     add(first);
 
     await render();
+
     expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
     expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
   });

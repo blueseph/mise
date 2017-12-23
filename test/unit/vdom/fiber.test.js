@@ -1,5 +1,5 @@
 import { create } from '../../../src/vdom/fiber';
-import { mockFiber, emptyFiber } from '../../utils';
+import { mockFiber } from '../../utils';
 
 describe('fiber tests', () => {
   it('should exist', () => {
@@ -22,6 +22,9 @@ describe('fiber tests', () => {
         next,
       });
 
+      const nextElement = document.createElement('ul');
+      nextElement.setAttribute('class', 'b');
+
       expect(fiber).toEqual({
         parent,
         previous: {
@@ -30,7 +33,7 @@ describe('fiber tests', () => {
         },
         next: {
           tree: next,
-          element: null,
+          element: nextElement,
         },
       });
     });
@@ -47,11 +50,11 @@ describe('fiber tests', () => {
         parent,
         previous: {
           element,
-          tree: emptyFiber,
+          tree: null,
         },
         next: {
           element: null,
-          tree: emptyFiber,
+          tree: null,
         },
       });
     });

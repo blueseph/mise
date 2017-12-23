@@ -91,6 +91,7 @@ describe('counter example', () => {
         todos: [],
         input: '',
         id: 0,
+        value: '',
       },
       actions: {
         add: (state, actions) => {

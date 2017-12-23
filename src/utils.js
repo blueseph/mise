@@ -13,4 +13,6 @@ const compose = (...fns) => {
   return fns.reduce((composed, fn) => (...args) => composed(fn(...args)));
 };
 
-export { getUniques, compose };
+const makeCopy = item => (Array.isArray(item) ? [...item] : { ...item });
+
+export { getUniques, compose, makeCopy };

@@ -1,5 +1,32 @@
 import { create, types } from './fiber';
-import { createElement, paint } from './vdom';
+import { paint } from './vdom';
+
+const shouldReplace = (previous, updated) =>
+  typeof previous !== typeof updated ||
+  (typeof previous === 'string' && previous !== updated) ||
+  previous.type !== updated.type;
+
+const getFiberizedChildren = (fiber) => {
+  let children = [];
+  const prevChildren = (fiber.previous.tree && fiber.previous.tree.children) || [];
+  const nextChildren = (fiber.next.tree && fiber.next.tree.children) || [];
+  const length = Math.max(prevChildren.length, nextChildren.length);
+
+  if (fiber.previous.element) {
+    for (let i = 0; i < length; i += 1) {
+      const newFiber = create({
+        parent: fiber.previous.element,
+        element: (fiber.previous.element && fiber.previous.element.childNodes[i]) || null,
+        previous: prevChildren[i],
+        next: nextChildren[i],
+      });
+
+      children = [...children, newFiber];
+    }
+  }
+
+  return children;
+};
 
 const reconciler = () => {
   let inProgress = false;
@@ -12,98 +39,81 @@ const reconciler = () => {
     return item;
   };
 
-  const shouldReplace = (previous, updated) =>
-    typeof previous !== typeof updated ||
-    (typeof previous === 'string' && previous !== updated) ||
-    previous.type !== updated.type;
+  const reconcile = (original) => {
+    const fiber = { ...original };
 
-  const addChildren = (fiber) => {
-    const prevChildren = (fiber.previous.tree && fiber.previous.tree.children) || [];
-    const nextChildren = (fiber.next.tree && fiber.next.tree.children) || [];
-    const length = Math.max(prevChildren.length, nextChildren.length);
+    if (fiber.previous.tree === null && fiber.next.tree === null) {
+      fiber.action = types.skip;
 
-    if (fiber.previous.element) {
-      for (let i = 0; i < length; i += 1) {
-        const newFiber = create({
-          parent: fiber.previous.element,
-          element: (fiber.previous.element && fiber.previous.element.childNodes[i]) || null,
-          previous: prevChildren[i],
-          next: nextChildren[i],
-        });
-
-        // eslint-disable-next-line no-use-before-define
-        add(newFiber);
-      }
-    }
-  };
-
-  const reconcile = (fiber) => {
-    const newFiber = { ...fiber };
-    if ((!fiber.previous.tree || fiber.previous.tree.empty)
-      && (!fiber.next.tree || fiber.next.tree.empty)) {
-      newFiber.action = types.skip;
-      return newFiber;
+      return fiber;
     }
 
-    addChildren(fiber);
-
-    if (fiber.next && fiber.next.tree && (!fiber.previous.tree || fiber.previous.tree.empty)) {
-      newFiber.action = types.create;
-      newFiber.next.element = createElement(fiber.next.tree);
-
+    if (!fiber.previous.tree) {
+      fiber.action = types.create;
       if (fiber.next.tree.props && fiber.next.tree.props.oncreate) {
-        newFiber.lifecycle = fiber.next.tree.props.oncreate;
+        fiber.lifecycle = fiber.next.tree.props.oncreate;
       }
 
-      return newFiber;
+      return fiber;
     }
 
-    if (!fiber.next.tree || fiber.next.tree.empty) {
-      newFiber.action = types.remove;
+    if (!fiber.next.tree) {
+      fiber.action = types.remove;
+
       if (fiber.previous.tree.props && fiber.previous.tree.props.onremove) {
-        newFiber.lifecycle = fiber.previous.tree.props.onremove;
+        fiber.lifecycle = fiber.previous.tree.props.onremove;
       }
 
-      return newFiber;
+      return fiber;
     }
 
     if (shouldReplace(fiber.previous.tree, fiber.next.tree)) {
-      newFiber.action = types.replace;
-      newFiber.next.element = createElement(fiber.next.tree);
+      fiber.action = types.replace;
 
       if (fiber.next.tree.props && fiber.next.tree.props.onupdate) {
-        newFiber.lifecycle = fiber.next.tree.props.onupdate;
+        fiber.lifecycle = fiber.next.tree.props.onupdate;
       }
 
-      return newFiber;
+      return fiber;
     }
 
-    newFiber.action = types.update;
+    fiber.action = types.update;
     if (fiber.next.tree.props && fiber.next.tree.props.onupdate) {
-      newFiber.lifecycle = fiber.next.tree.props.onupdate;
+      fiber.lifecycle = fiber.next.tree.props.onupdate;
     }
 
-    return newFiber;
+    return fiber;
   };
 
   const work = (deadline) => {
     while (deadline.timeRemaining() && workQueue.length) {
-      const completed = reconcile(next());
-      // don't add null elements like null routes to the finished queue for painting.
-      if (completed.action !== types.skip) finished = [...finished, completed];
+      const fiber = next();
+      const completed = reconcile(fiber);
+
+      if (completed.action !== types.skip) {
+        const children = getFiberizedChildren(fiber);
+
+        if (children.length) {
+          // eslint-disable-next-line no-use-before-define
+          children.forEach(add);
+        }
+
+        finished = [...finished, completed];
+      }
     }
   };
 
-  const process = (deadline) => {
+  const exhaustQueue = (deadline) => {
     work(deadline);
 
     if (workQueue.length) {
-      requestIdleCallback(process);
+      requestIdleCallback(exhaustQueue);
     } else {
       inProgress = false;
 
-      const boundPaint = paint.bind(null, finished);
-      requestAnimationFrame(boundPaint);
+      const currentQueue = [...finished];
+
+      requestAnimationFrame(() => paint(currentQueue));
 
       finished = [];
     }
@@ -114,7 +124,7 @@ const reconciler = () => {
 
     if (!inProgress) {
       inProgress = true;
-      requestIdleCallback(process);
+      requestIdleCallback(exhaustQueue);
     }
   };
 

@@ -1,3 +1,5 @@
+import { createElement } from './vdom';
+
 const types = {
   create: 'CREATE',
   remove: 'REMOVE',
@@ -6,16 +8,11 @@ const types = {
   skip: 'SKIP',
 };
 
-const empty = () => ({
-  children: [],
-  empty: true,
-});
-
 const create = ({
   parent,
   element = null,
-  previous = empty(),
-  next = empty(),
+  previous = null,
+  next = null,
 }) => ({
   parent,
   previous: {
@@ -24,7 +21,7 @@ const create = ({
   },
   next: {
     tree: next,
-    element: null,
+    element: next !== null ? createElement(next) : next,
   },
 });
 

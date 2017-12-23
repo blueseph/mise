@@ -33,15 +33,9 @@ const mockFiber = () => {
   };
 };
 
-const emptyFiber = {
-  children: [],
-  empty: true,
-};
-
 const getLastMockCall = mocked => mocked.mock.calls[mocked.mock.calls.length - 1];
 
 export {
   mockFiber,
-  emptyFiber,
   getLastMockCall,
 };

@@ -175,6 +175,7 @@ describe('vdom', () => {
             class: 'updated',
             style: { textDecoration: 'strike-through' },
           },
+          children: [],
         };
 
         const previous = {
@@ -211,6 +212,7 @@ describe('vdom', () => {
           props: {
             disabled: true,
           },
+          children: [],
         };
 
         const previous = {
@@ -243,6 +245,7 @@ describe('vdom', () => {
           props: {
             disabled: false,
           },
+          children: [],
         };
 
         const previous = {
@@ -274,6 +277,7 @@ describe('vdom', () => {
           props: {
             value: 'hello',
           },
+          children: [],
         };
 
         const previous = {
@@ -281,12 +285,12 @@ describe('vdom', () => {
           props: {},
         };
 
-        const fiber = create(
+        const fiber = create({
           parent,
           element,
           previous,
           next,
-        );
+        });
 
         fiber.action = types.update;
 

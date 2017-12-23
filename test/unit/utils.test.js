@@ -1,4 +1,4 @@
-import { getUniques, compose } from '../../src/utils';
+import { getUniques, compose, makeCopy } from '../../src/utils';
 
 describe('get uniques', () => {
   it('should properly find the uniques', () => {
@@ -51,5 +51,23 @@ describe('compose', () => {
     const fn = () => {};
 
     expect(compose(fn)).toBe(fn);
+  });
+
+  describe('make copy', () => {
+    it('should properly clone an array', () => {
+      const initial = [1, 2, 3];
+      const copy = makeCopy(initial);
+
+      expect(copy).toEqual(initial);
+      expect(copy).not.toBe(initial);
+    });
+
+    it('should properly clone an object', () => {
+      const initial = { a: 1, b: 2 };
+      const copy = makeCopy(initial);
+
+      expect(copy).toEqual(initial);
+      expect(copy).not.toBe(initial);
+    });
   });
 });

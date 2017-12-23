@@ -2,30 +2,7 @@ import { getUniques } from '../utils';
 import { types } from './fiber';
 
 const setProp = (element, attribute, previous, next) => {
-  if (attribute === 'value') {
-    element[attribute] = next;
-    return;
-  }
-
-  if (typeof next === 'boolean') {
-    if (next) {
-      element.setAttribute(attribute, next);
-      element[attribute] = next;
-    }
-    return;
-  }
-
-  if (typeof next === 'function') {
-    try {
-      element[attribute] = next;
-    } catch (e) {
-      /* sometimes lifecycle methods throw. we don't particularly care */
-    }
-
-    return;
-  }
-
-  if (!next || (typeof next === 'object' && !Object.keys(next).length)) {
+  if (next === undefined || next === false || (typeof next === 'object' && !Object.keys(next).length)) {
     element.removeAttribute(attribute);
     return;
   }
@@ -40,16 +17,24 @@ const setProp = (element, attribute, previous, next) => {
         element.style[style] = next[style];
       }
     }
+  } else {
+    try {
+      element[attribute] = next;
+    } catch (ex) {
+      /* sometimes mise lifecycle methods throw when attaching to null elements */
+    }
 
-    return;
+    if (typeof next !== 'function' && attribute !== 'value' && attribute !== 'boolean') {
+      element.setAttribute(attribute, next);
+    }
   }
-
-  element.setAttribute(attribute, next);
 };
 
-const setProps = (element, props) => {
-  for (const [attribute, value] of Object.entries(props)) {
-    setProp(element, attribute, {}, value);
+const setProps = (element, previous, next) => {
+  const props = getUniques(previous, next);
+
+  for (const prop of props) {
+    setProp(element, prop, previous[prop], next[prop]);
   }
 };
 
@@ -62,21 +47,13 @@ const createElement = (node) => {
 
   const { type, props, children } = node;
   const element = document.createElement(type);
-  setProps(element, props);
+  setProps(element, {}, props);
 
   children
     .map(createElement)
     .forEach(child => child && element.appendChild(child));
 
   return element;
-};
-
-const updateProps = (element, previous, next) => {
-  const props = getUniques(previous, next);
-
-  for (const prop of props) {
-    setProp(element, prop, previous[prop], next[prop]);
-  }
 };
 
 const paint = (fibers) => {
@@ -128,7 +105,7 @@ const paint = (fibers) => {
           lifecycle(next.element)(previous.props);
         }
 
-        updateProps(previous.element, previous.tree.props, next.tree.props);
+        setProps(previous.element, previous.tree.props, next.tree.props);
 
         break;
       }
