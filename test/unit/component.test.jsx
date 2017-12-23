@@ -29,12 +29,10 @@ describe('component tests', () => {
           id="async"
           onclick={actions.asyncUpdate}
         />
-        <div>
-          <div>
-            {null}
-            {null}
-            <div />
-          </div>
+        <div id="null">
+          {null}
+          {null}
+          <article />
         </div>
       </div>
     );
@@ -92,5 +90,11 @@ describe('component tests', () => {
 
     await render();
     expect(middlewareFn).toHaveBeenCalled();
+  });
+
+  it('should properly handle null children', async () => {
+    const nulled = body.querySelector('#null');
+
+    expect(nulled.children.length).toEqual(1);
   });
 });
