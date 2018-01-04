@@ -53,7 +53,7 @@ const component = ({
       tempActions[key] = (data) => {
         const readOnlyState = makeCopy(appState);
         const readOnlyActions = makeCopy(appActions);
-        
+
         const boundFn = fn.bind(null, readOnlyState, readOnlyActions);
 
         const middlewares = middleware.map(m => m(readOnlyState)(key));
