@@ -1,6 +1,6 @@
 # Middleware
 
-Mise supports middleware that fire right as before update is going to occur. Mise supports Express/Koa/Redux style middleware where each composable and pure.
+Mise supports middleware that fire right before an update is going to occur. Mise supports Express/Koa/Redux style middleware where each composable and pure.
 
 ```js
 const logger = previous => action => next => (data) => {
