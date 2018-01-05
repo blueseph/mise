@@ -1,6 +1,6 @@
 {
   "name": "@mise/core",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "description": "a small, no-frills library to build complex client-side applications and easily manage state",
   "main": "dist/mise.js",
   "repository": {
