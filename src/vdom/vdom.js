@@ -68,7 +68,8 @@ const paint = (fibers) => {
 
     switch (action) {
       case (types.create): {
-        parent.appendChild(next.element);
+        if (previous.tree === null) parent.insertBefore(next.element, previous.element);
+        else parent.appendChild(next.element);
 
         if (lifecycle) {
           lifecycle(next.element);

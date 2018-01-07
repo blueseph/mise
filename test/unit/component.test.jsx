@@ -30,10 +30,12 @@ describe('component tests', () => {
           onclick={actions.asyncUpdate}
         />
         <div id="null">
-          {null}
-          {null}
-          <article />
+          {state.nulls}
         </div>
+        <button
+          id="renderNulls"
+          onclick={actions.renderNulls}
+          />
       </div>
     );
 
@@ -41,6 +43,7 @@ describe('component tests', () => {
       template,
       state: {
         text: 'hello, world',
+        nulls: [ null, null, <article />],
       },
       actions: {
         update: state => ({ text: `${state.text}!` }),
@@ -49,6 +52,7 @@ describe('component tests', () => {
             update({ text: `${state.text}!!` });
           }, 50);
         },
+        renderNulls: state => ({ nulls: [ <main />, null, <article />] }),
       },
       middleware: [middleware],
       init: initFn,
@@ -96,5 +100,19 @@ describe('component tests', () => {
     const nulled = body.querySelector('#null');
 
     expect(nulled.children.length).toEqual(1);
+    expect(nulled.innerHTML).toEqual('<article></article>');
   });
+
+  it('should correctly replace null children if they exist', async () => {
+    const nulled = body.querySelector('#null');
+    const renderNulls = body.querySelector('#renderNulls');
+
+    expect(nulled.children.length).toEqual(1);
+    expect(nulled.innerHTML).toEqual('<article></article>');
+
+    renderNulls.click();
+    await render();
+
+    expect(nulled.innerHTML).toEqual('<main></main><article></article>');
+  })
 });
