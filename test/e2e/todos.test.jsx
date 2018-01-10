@@ -44,7 +44,7 @@ describe('counter example', () => {
   };
 
   const template = state => actions => (
-    <div>
+    <div id="todos-test">
       <h1>Todos</h1>
 
       <ul id="todos" className="todos">

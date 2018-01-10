@@ -35,7 +35,14 @@ describe('component tests', () => {
         <button
           id="renderNulls"
           onclick={actions.renderNulls}
-          />
+        />
+        <div id="items">
+          {state.items.map(item => <span>{item}</span>)}
+        </div>
+        <button 
+          id="addItems"
+          onclick={actions.addItems}
+        />
       </div>
     );
 
@@ -43,7 +50,8 @@ describe('component tests', () => {
       template,
       state: {
         text: 'hello, world',
-        nulls: [ null, null, <article />],
+        nulls: [ null, <article />, null],
+        items: [],
       },
       actions: {
         update: state => ({ text: `${state.text}!` }),
@@ -52,7 +60,8 @@ describe('component tests', () => {
             update({ text: `${state.text}!!` });
           }, 50);
         },
-        renderNulls: state => ({ nulls: [ <main />, null, <article />] }),
+        renderNulls: state => ({ nulls: [ <main />, <article />, null] }),
+        addItems: state => ({ items: [ ...state.items, 'an item', ]}),
       },
       middleware: [middleware],
       init: initFn,
@@ -114,5 +123,19 @@ describe('component tests', () => {
     await render();
 
     expect(nulled.innerHTML).toEqual('<main></main><article></article>');
-  })
+  });
+
+  it('should properly handle many actions being pressed at once', async () => {
+    const items = body.querySelector('#items');
+    const addItems = body.querySelector('#addItems');
+
+    expect(items.children.length).toEqual(0);
+
+    addItems.click();
+    addItems.click();
+    addItems.click();
+    await render();
+
+    expect(items.children.length).toEqual(3);
+  });
 });

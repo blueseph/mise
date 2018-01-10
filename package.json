@@ -17,11 +17,14 @@
   "scripts": {
     "test": "jest --coverage --verbose",
     "test:watch": "jest --coverage --verbose --watch",
+
     "build": "webpack --optimize-minimize",
     "build:unoptimized": "webpack",
+
     "lint": "eslint ./src/",
     "lint:fix": "eslint --fix ./src/",
-    "start": "npm run lint && npm run build && npm run test",
+
+    "start": "npm run lint && npm run test && npm run build",
     "prepublishOnly": "npm start"
   },
   "jest": {
