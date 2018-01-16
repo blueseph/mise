@@ -44,7 +44,7 @@ describe('DOM jsx tests', () => {
   it('should properly handle a tag with props but no children', () => {
     const props = {
       id: 'news',
-      className: 'main-section',
+      class: 'main-section',
     };
 
     const element = <main {...props} />;
@@ -85,7 +85,7 @@ describe('DOM jsx tests', () => {
       children: [],
     });
 
-    const props = { id: 'thing', className: 'thing-haver' };
+    const props = { id: 'thing', class: 'thing-haver' };
     element = <StatelessComponent {...props} />;
 
     expect(element).toEqual({
@@ -94,7 +94,7 @@ describe('DOM jsx tests', () => {
       children: [],
     });
 
-    const secondProps = { id: 'second-thing', className: 'thing-haver' };
+    const secondProps = { id: 'second-thing', class: 'thing-haver' };
     element = (
       <StatelessComponent {...props}>
         <StatelessComponent {...secondProps} />

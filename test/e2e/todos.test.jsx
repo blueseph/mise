@@ -47,7 +47,7 @@ describe('counter example', () => {
     <div id="todos-test">
       <h1>Todos</h1>
 
-      <ul id="todos" className="todos">
+      <ul id="todos" class="todos">
         {state.todos.map(todo => (
           <TodoItem
             create={() => {}}

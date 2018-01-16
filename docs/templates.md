@@ -12,7 +12,7 @@ Secondary templates (i.e. templates that aren't at the root level) are functions
 
 ```javascript
 const secondary = (props, children) => {
-    <li className={props.className}>
+    <li class={props.class}>
       <div>{children}</div>
     </li>
 }
