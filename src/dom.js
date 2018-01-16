@@ -4,11 +4,9 @@ const dom = (type, uncheckedProps = {}, ...uncheckedChildren) => {
 
   for (const child of uncheckedChildren) {
     if (Array.isArray(child)) {
-      children = [...children, ...child.filter(child => Boolean(child))];
-    } else {
-      if (child !== null) {
-        children = [...children, typeof child === 'number' ? String(child) : child];
-      }
+      children = [...children, ...child.filter(node => Boolean(node))];
+    } else if (child !== null) {
+      children = [...children, typeof child === 'number' ? String(child) : child];
     }
   }
 
