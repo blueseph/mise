@@ -3,13 +3,7 @@ import { types } from './fiber';
 
 const setProp = (element, attribute, previous, next) => {
   if (next === undefined || next === false || (typeof next === 'object' && !Object.keys(next).length)) {
-    console.log(element, attribute, previous, next)
-    try {
-      element.removeAttribute(attribute);
-    } catch (ex) {
-      console.log(element, attribute, previous, next);
-    }
-
+    element.removeAttribute(attribute);
     return;
   }
 

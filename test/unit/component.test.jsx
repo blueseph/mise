@@ -43,6 +43,13 @@ describe('component tests', () => {
           id="addItems"
           onclick={actions.addItems}
         />
+        <div id="text-node-to-regular-node">
+          {state.textNodeToRegularNode}
+        </div>
+        <button
+          id="textNodeToRegularNode"
+          onclick={actions.textNodeToRegularNode}
+        />
       </div>
     );
 
@@ -52,6 +59,7 @@ describe('component tests', () => {
         text: 'hello, world',
         nulls: [ null, <article />, null],
         items: [],
+        textNodeToRegularNode: 0,
       },
       actions: {
         update: state => ({ text: `${state.text}!` }),
@@ -62,6 +70,7 @@ describe('component tests', () => {
         },
         renderNulls: state => ({ nulls: [ <main />, <article />, null] }),
         addItems: state => ({ items: [ ...state.items, 'an item', ]}),
+        textNodeToRegularNode: state => ({ textNodeToRegularNode: (<div><main> hello, world! </main></div>) }),
       },
       middleware: [middleware],
       init: initFn,
@@ -138,4 +147,16 @@ describe('component tests', () => {
 
     expect(items.children.length).toEqual(3);
   });
+
+  it('should properly handle a text node -> node with children transition', async () => {
+    const node = body.querySelector('#text-node-to-regular-node');
+    const nodeButtom = body.querySelector('#textNodeToRegularNode');
+
+    expect(node.innerHTML).toEqual("0");
+
+    nodeButtom.click();
+    await render();
+
+    expect(node.innerHTML).toEqual('<div><main> hello, world! </main></div>');
+  })
 });
