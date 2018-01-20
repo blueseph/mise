@@ -83,12 +83,12 @@ const component = ({
 
     if (!appTemplate) {
       appTemplate = generateTemplate(appState)(appActions);
-      
+
       const fiber = create({
         parent: root,
         next: appTemplate,
       });
-  
+
       add(fiber);
     }
   };
