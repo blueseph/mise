@@ -19,12 +19,12 @@ const setProp = (element, attribute, previous, next) => {
     }
   } else {
     try {
-      element[attribute] = next;
+      element[attribute] = next || '';
     } catch (ex) {
       /* sometimes mise lifecycle methods throw. we dont care */
     }
 
-    if (typeof next !== 'function' && attribute !== 'value' && attribute !== 'boolean') {
+    if (typeof next !== 'function' && attribute !== 'value' && attribute !== 'boolean' && next) {
       element.setAttribute(attribute, next);
     }
   }
@@ -66,9 +66,7 @@ const paint = (fibers) => {
 
     switch (action) {
       case (types.create): {
-        if (previous.tree === null && previous.element) {
-          parent.insertBefore(next.element, previous.element);
-        } else parent.appendChild(next.element);
+        parent.appendChild(next.element);
 
         if (lifecycle) {
           lifecycle(next.element);

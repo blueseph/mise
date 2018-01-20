@@ -3,12 +3,12 @@ import { create } from './vdom/fiber';
 import { compose, makeCopy } from './utils';
 
 const component = ({
-  template,
-  state,
-  actions,
+  template = () => () => {},
+  state = {},
+  actions = {},
   root = document.body,
   middleware = [],
-  init,
+  init = () => () => {},
 }) => {
   const { add } = reconciler();
 
@@ -79,7 +79,7 @@ const component = ({
     const readOnlyState = makeCopy(appState);
     const readOnlyActions = makeCopy(appActions);
 
-    if (init) init(readOnlyState)(readOnlyActions);
+    init(readOnlyState)(readOnlyActions);
 
     appTemplate = generateTemplate(appState)(appActions);
 
