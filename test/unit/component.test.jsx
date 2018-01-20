@@ -34,6 +34,22 @@ describe('component tests', () => {
     expect(init).toHaveBeenCalled();
   });
 
+  it('should render only once if an action is called in the init function', async () => {
+    component({
+      template: state => actions => 
+        <div class="pleaseDontDoubleRender" />
+      ,
+      actions: {
+        noop: () => ({}),
+      },
+      init: state => actions => actions.noop(),
+    });
+
+    await render();
+
+    expect(body.querySelectorAll('.pleaseDontDoubleRender').length).toEqual(1);
+  })
+
   it('should properly render the state', async () => {
     component({
       template: state => actions =>
@@ -145,7 +161,6 @@ describe('component tests', () => {
   });
 
   it('should correctly replace null children if they exist', async () => {
-
     component({
       template: state => actions =>
         <div>

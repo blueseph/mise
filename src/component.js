@@ -81,14 +81,16 @@ const component = ({
 
     init(readOnlyState)(readOnlyActions);
 
-    appTemplate = generateTemplate(appState)(appActions);
-
-    const fiber = create({
-      parent: root,
-      next: appTemplate,
-    });
-
-    add(fiber);
+    if (!appTemplate) {
+      appTemplate = generateTemplate(appState)(appActions);
+      
+      const fiber = create({
+        parent: root,
+        next: appTemplate,
+      });
+  
+      add(fiber);
+    }
   };
 
   initialize(actions);
