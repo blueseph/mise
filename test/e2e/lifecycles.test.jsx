@@ -8,7 +8,7 @@ describe('lifecycle tests', () => {
   const { body } = document;
 
   beforeEach(() => {
-    document.body.innerHTML = '';
+    body.innerHTML = '';
   });
 
   it('should exercise an oncreate lifecycle event for non-parent items', async () => {
