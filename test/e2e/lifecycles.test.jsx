@@ -1,15 +1,14 @@
-import { dom, component } from '../../src';
 import { commis } from '@mise/test';
+
+import { dom, component } from '../../src';
 
 const { render } = commis();
 
 describe('lifecycle tests', () => {
-  let body;
+  const { body } = document;
 
   beforeEach(() => {
     document.body.innerHTML = '';
-
-    body = document.body;
   });
 
   it('should exercise an oncreate lifecycle event for non-parent items', async () => {
