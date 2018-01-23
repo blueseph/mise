@@ -123,7 +123,7 @@ describe('counter example', () => {
       },
     });
 
-    await render();
+    await render(75);
   });
 
   it('should load', async () => {
