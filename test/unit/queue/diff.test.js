@@ -193,7 +193,7 @@ describe('diff', () => {
 
     add(first);
 
-    await render(500);
+    await render(1500);
     expect(getLastMockCall(reconcile)[0].length).toBe(2501);
   });
 });
