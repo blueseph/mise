@@ -1,5 +1,5 @@
-import { reconciler } from './vdom/reconciler';
-import { create } from './vdom/fiber';
+import { createDiff } from './queue/diff';
+import { create } from './queue/fiber';
 import { compose, makeCopy } from './utils';
 
 const component = ({
@@ -10,7 +10,7 @@ const component = ({
   middleware = [],
   init = () => () => {},
 }) => {
-  const { add } = reconciler();
+  const { add } = createDiff();
 
   let appTemplate;
   let appState;

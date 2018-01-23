@@ -70,4 +70,24 @@ describe('compose', () => {
       expect(copy).not.toBe(initial);
     });
   });
+
+  describe('makeCopy', () => {
+    it('should make a copy if its an array', () => {
+      const arr = [1, 2, 3];
+
+      const copiedArr = makeCopy(arr);
+
+      expect(copiedArr).toEqual(arr);
+      expect(copiedArr).not.toBe(arr);
+    });
+
+    it('should make a copy if its an object, too', () => {
+      const obj = { a: 1, b: 2, c: 3};
+
+      const copiedObj = makeCopy(obj);
+
+      expect(copiedObj).toEqual(obj);
+      expect(copiedObj).not.toBe(obj);
+    });
+  });
 });

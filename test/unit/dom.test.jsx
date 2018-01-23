@@ -113,4 +113,16 @@ describe('DOM jsx tests', () => {
       ],
     });
   });
+
+  it('should squash null children', () => {
+    const children = [null, null, <article />, null];
+
+    const element = (
+      <main>
+        {children}
+      </main>
+    );
+
+    expect(element.children.length).toBe(1);
+  })
 });

@@ -1,10 +1,11 @@
-import { dom, component } from '../../src';
 import { commis } from '@mise/test';
+import { dom, component } from '../../src';
 
 const { render } = commis();
 
 describe('counter example', () => {
-  let body;
+  const { body } = document;
+
   const template = state => actions => (
     <div>
       <span id="counter">{state.counter}</span>
@@ -20,7 +21,7 @@ describe('counter example', () => {
   );
 
   beforeEach(async () => {
-    document.body.innerHTML = '';
+    body.innerHTML = '';
 
     component({
       template,
@@ -32,8 +33,6 @@ describe('counter example', () => {
         decrement: state => ({ counter: state.counter - 1 }),
       },
     });
-
-    body = document.body;
 
     await render();
   });

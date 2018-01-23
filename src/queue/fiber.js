@@ -1,4 +1,4 @@
-import { createElement } from './vdom';
+import { createElement } from '../vdom/createElement';
 
 const types = {
   create: 'CREATE',

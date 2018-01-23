@@ -1,5 +1,4 @@
 import { getUniques } from '../utils';
-import { types } from './fiber';
 
 const setProp = (element, attribute, previous, next) => {
   if (next === undefined || next === false || (typeof next === 'object' && !Object.keys(next).length)) {
@@ -54,65 +53,4 @@ const createElement = (node) => {
   return element;
 };
 
-const paint = (fibers) => {
-  for (const fiber of fibers) {
-    const {
-      action,
-      next,
-      previous,
-      lifecycle,
-      parent,
-    } = fiber;
-
-    switch (action) {
-      case (types.create): {
-        parent.appendChild(next.element);
-
-        if (lifecycle) {
-          lifecycle(next.element);
-        }
-
-        break;
-      }
-
-      case (types.remove): {
-        if (lifecycle) {
-          lifecycle(next.element)(previous.element.remove.bind(previous.element));
-        } else {
-          previous.element.remove();
-        }
-
-        break;
-      }
-
-      case (types.replace): {
-        if (lifecycle) {
-          lifecycle(next.element)(previous.props);
-        }
-
-        parent.replaceChild(
-          next.element,
-          previous.element,
-        );
-
-        break;
-      }
-
-      case (types.update): {
-        if (lifecycle) {
-          lifecycle(next.element)(previous.props);
-        }
-
-        setProps(previous.element, previous.tree.props, next.tree.props);
-
-        break;
-      }
-
-      default: {
-        return;
-      }
-    }
-  }
-};
-
-export { paint, createElement };
+export { setProps, createElement };
