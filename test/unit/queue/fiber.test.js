@@ -1,4 +1,4 @@
-import { create } from '../../../src/vdom/fiber';
+import { create } from '../../../src/queue/fiber';
 import { mockFiber } from '../../utils';
 
 describe('fiber tests', () => {

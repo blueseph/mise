@@ -1,5 +1,5 @@
 import { create, types } from './fiber';
-import { paint } from './vdom';
+import { reconcile } from '../vdom/reconcile';
 
 const shouldReplace = (previous, updated) =>
   typeof previous !== typeof updated ||
@@ -28,7 +28,21 @@ const getFiberizedChildren = (fiber) => {
   return children;
 };
 
-const reconcile = (original) => {
+const triggerLifeCycle = (
+  element,
+  tree,
+  lifecycle,
+) => {
+  if (typeof tree === 'object') {
+    if (tree.props[lifecycle]) tree.props[lifecycle](element);
+
+    Array.from(element.children)
+      .filter(child => child)
+      .forEach((child, i) => triggerLifeCycle(child, tree.children[i], lifecycle));
+  }
+};
+
+const diff = (original) => {
   const fiber = { ...original };
 
   if (fiber.previous.tree === null && fiber.next.tree === null) {
@@ -38,20 +52,15 @@ const reconcile = (original) => {
   }
 
   if (!fiber.previous.tree) {
+    triggerLifeCycle(fiber.next.element, fiber.next.tree, 'oncreate');
     fiber.action = types.create;
-    if (fiber.next.tree.props && fiber.next.tree.props.oncreate) {
-      fiber.lifecycle = fiber.next.tree.props.oncreate;
-    }
 
     return fiber;
   }
 
   if (!fiber.next.tree) {
+    triggerLifeCycle(fiber.previous.element, fiber.previous.tree, 'onremove');
     fiber.action = types.remove;
-
-    if (fiber.previous.tree.props && fiber.previous.tree.props.onremove) {
-      fiber.lifecycle = fiber.previous.tree.props.onremove;
-    }
 
     return fiber;
   }
@@ -60,7 +69,7 @@ const reconcile = (original) => {
     fiber.action = types.replace;
 
     if (fiber.next.tree.props && fiber.next.tree.props.onupdate) {
-      fiber.lifecycle = fiber.next.tree.props.onupdate;
+      fiber.next.tree.props.onupdate(fiber.next.element)(fiber.previous.tree.props);
     }
 
     return fiber;
@@ -68,13 +77,13 @@ const reconcile = (original) => {
 
   fiber.action = types.update;
   if (fiber.next.tree.props && fiber.next.tree.props.onupdate) {
-    fiber.lifecycle = fiber.next.tree.props.onupdate;
+    fiber.next.tree.props.onupdate(fiber.next.element)(fiber.previous.tree.props);
   }
 
   return fiber;
 };
 
-const reconciler = () => {
+const createDiff = () => {
   let inProgress = false;
   let workQueue = [];
   let finished = [];
@@ -88,7 +97,7 @@ const reconciler = () => {
   const work = (deadline) => {
     while (deadline.timeRemaining() && workQueue.length) {
       const fiber = next();
-      const completed = reconcile(fiber);
+      const completed = diff(fiber);
 
       if (completed.action !== types.skip) {
         const children = getFiberizedChildren(fiber);
@@ -113,7 +122,7 @@ const reconciler = () => {
 
       const currentQueue = [...finished];
 
-      requestAnimationFrame(() => paint(currentQueue));
+      requestAnimationFrame(() => reconcile(currentQueue));
 
       finished = [];
     }
@@ -133,4 +142,4 @@ const reconciler = () => {
   };
 };
 
-export { reconciler };
+export { createDiff };

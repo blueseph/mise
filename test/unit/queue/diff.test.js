@@ -1,26 +1,29 @@
 import { commis } from '@mise/test';
 
-import { reconciler } from '../../../src/vdom/reconciler';
-import { create, types } from '../../../src/vdom/fiber';
-import { paint } from '../../../src/vdom/vdom';
+import { createDiff } from '../../../src/queue/diff';
+import { create, types } from '../../../src/queue/fiber';
+import { reconcile } from '../../../src/vdom/reconcile';
 
 import {
   mockFiber,
   getLastMockCall,
 } from '../../utils';
 
-jest.mock('../../../src/vdom/vdom');
+jest.mock('../../../src/vdom/reconcile');
 
 const { render } = commis();
 
-describe('reconciler', () => {
-  const { add } = reconciler();
+describe('diff', () => {
+  const { add } = createDiff();
 
   it('should exist', () => {
     expect(add).toBeDefined();
   });
 
   it('should replace', async () => {
+    const spy = jest.fn();
+    const inner = () => spy;
+
     const {
       parent,
       element,
@@ -35,17 +38,20 @@ describe('reconciler', () => {
       next,
     });
 
-    next.props.onupdate = () => {};
+    next.props.onupdate = inner;
 
     add(first);
 
     await render();
 
-    expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
-    expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
+    expect(getLastMockCall(reconcile)[0][0].action).toBe(types.replace);
+    expect(spy).toHaveBeenCalled();
   });
 
   it('should update', async () => {
+    const spy = jest.fn();
+    const inner = () => spy;
+
     const {
       parent,
       element,
@@ -54,7 +60,7 @@ describe('reconciler', () => {
     } = mockFiber();
 
     next.type = 'div';
-    next.props.onupdate = () => {};
+    next.props.onupdate = inner;
 
     const first = create({
       parent,
@@ -66,11 +72,13 @@ describe('reconciler', () => {
     add(first);
 
     await render();
-    expect(getLastMockCall(paint)[0][0].action).toBe(types.update);
-    expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
+    expect(getLastMockCall(reconcile)[0][0].action).toBe(types.update);
+    expect(spy).toHaveBeenCalledTimes(1);
   });
 
   it('should create', async () => {
+    const spy = jest.fn();
+
     const {
       parent,
       element,
@@ -78,7 +86,7 @@ describe('reconciler', () => {
     } = mockFiber();
 
     next.type = 'div';
-    next.props.oncreate = () => {};
+    next.props.oncreate = spy;
 
     const first = create({
       parent,
@@ -89,11 +97,13 @@ describe('reconciler', () => {
     add(first);
 
     await render();
-    expect(getLastMockCall(paint)[0][0].action).toBe(types.create);
-    expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
+    expect(getLastMockCall(reconcile)[0][0].action).toBe(types.create);
+    expect(spy).toHaveBeenCalled();
   });
 
   it('should remove', async () => {
+    const spy = jest.fn();
+
     const {
       parent,
       element,
@@ -106,13 +116,13 @@ describe('reconciler', () => {
       previous,
     });
 
-    previous.props.onremove = () => {};
+    previous.props.onremove = spy;
 
     add(first);
 
     await render();
-    expect(getLastMockCall(paint)[0][0].action).toBe(types.remove);
-    expect(getLastMockCall(paint)[0][0].lifecycle).toBeDefined();
+    expect(getLastMockCall(reconcile)[0][0].action).toBe(types.remove);
+    expect(spy).toHaveBeenCalled();
   });
 
   it('should handle text nodes, too', async () => {
@@ -134,7 +144,7 @@ describe('reconciler', () => {
     add(first);
 
     await render();
-    expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
+    expect(getLastMockCall(reconcile)[0][0].action).toBe(types.replace);
   });
 
   it('should properly process children', async () => {
@@ -157,61 +167,14 @@ describe('reconciler', () => {
     add(first);
 
     await render();
-    expect(getLastMockCall(paint)[0].length).toBe(4);
-    expect(getLastMockCall(paint)[0][0].action).toBe(types.replace);
-    expect(getLastMockCall(paint)[0][1].action).toBe(types.create);
-    expect(getLastMockCall(paint)[0][2].action).toBe(types.create);
-    expect(getLastMockCall(paint)[0][3].action).toBe(types.create);
-  });
-
-  it('should handle null elements', async () => {
-    const {
-      parent,
-      element,
-      previous,
-      next,
-    } = mockFiber();
-
-    next.children = [null, null, null, null];
-
-    const first = create({
-      parent,
-      element,
-      previous,
-      next,
-    });
-
-    add(first);
-    await render();
-
-    expect(getLastMockCall(paint)[0].length).toBe(1);
-  });
-
-  it('should handle null and non-null children', async () => {
-    const {
-      parent,
-      element,
-      previous,
-      next,
-    } = mockFiber();
-
-    next.children = [null, { ...next }, null, null];
-
-    const first = create({
-      parent,
-      element,
-      previous,
-      next,
-    });
-
-    add(first);
-    await render();
-
-    expect(getLastMockCall(paint)[0].length).toBe(2);
+    expect(getLastMockCall(reconcile)[0].length).toBe(4);
+    expect(getLastMockCall(reconcile)[0][0].action).toBe(types.replace);
+    expect(getLastMockCall(reconcile)[0][1].action).toBe(types.create);
+    expect(getLastMockCall(reconcile)[0][2].action).toBe(types.create);
+    expect(getLastMockCall(reconcile)[0][3].action).toBe(types.create);
   });
 
   it('should request another idle callback if theres too much work to do', async () => {
-
     const {
       parent,
       element,
@@ -231,6 +194,6 @@ describe('reconciler', () => {
     add(first);
 
     await render(500);
-    expect(getLastMockCall(paint)[0].length).toBe(2501);
+    expect(getLastMockCall(reconcile)[0].length).toBe(2501);
   });
 });

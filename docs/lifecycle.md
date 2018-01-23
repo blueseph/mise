@@ -11,7 +11,7 @@ component({
   template: state => actions => (
     <div>
       <span
-        oncreate={el => actions.hydrate(el)}
+        oncreate={el => actions.hydrate(el)} />
     </div>
   ),
   state: {
@@ -27,7 +27,7 @@ component({
 
 ### `onremove`
 
-`onremove` returns a curried function, one containing the actual element and the other containing a `done` function. Once you've finished your business with `onremove`, call `done` to actually remove it from the dom;
+`onremove` returns the element after it has been removed.
 
 ```javascript
 import { removalAnimation } from './animations';
@@ -35,15 +35,7 @@ import { removalAnimation } from './animations';
 component({
   template: state => actions => (
     <div>
-      <span
-        onremove={
-          el => done =>
-            el.animate([
-              removalAnimation
-            ], 2000);
-
-            setTimeout(done, 2000)
-      }
+      <span onremove={el => el.removeEventListener('custom-event', actions.customEventHandler)} />
     </div>
   ),
 });

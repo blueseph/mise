@@ -1,5 +1,6 @@
-import { dom, component } from '../../src';
 import { commis } from '@mise/test';
+
+import { dom, component } from '../../src';
 
 const { render } = commis();
 
@@ -32,11 +33,11 @@ const TodoItem = ({
 );
 
 describe('counter example', () => {
-  let body;
+  const { body } = document;
   let input;
 
   const addTodo = (text = 'new todo') => {
-    input = document.body.querySelector('input');
+    input = body.querySelector('input');
     input.value = text;
 
     input.dispatchEvent(new Event('input'));
@@ -51,7 +52,7 @@ describe('counter example', () => {
         {state.todos.map(todo => (
           <TodoItem
             create={() => {}}
-            remove={() => done => done()}
+            remove={() => {}}
             update={() => oldProps => oldProps}
             text={todo.text}
             id={todo.id}
@@ -83,7 +84,7 @@ describe('counter example', () => {
   );
 
   beforeEach(async () => {
-    document.body.innerHTML = '';
+    body.innerHTML = '';
 
     component({
       template,
@@ -121,8 +122,6 @@ describe('counter example', () => {
         clearTodos: () => ({ todos: [] }),
       },
     });
-
-    body = document.body;
 
     await render();
   });
