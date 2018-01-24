@@ -1,8 +1,8 @@
 const typeError = 'dom was called with an undefined type. Did you forget to define something?';
-const invalidFunctionValue = name => `${name} was called and returned undefined. Are you sure it's defined properly?`
+const invalidFunctionValue = name => `${name} was called and returned undefined. Are you sure it's defined properly?`;
 
 const dom = (type, uncheckedProps = {}, ...uncheckedChildren) => {
-  if (!type) throw new Error(typeError)
+  if (!type) throw new Error(typeError);
 
   let children = [];
   let props = uncheckedProps;
