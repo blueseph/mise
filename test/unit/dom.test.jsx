@@ -124,5 +124,12 @@ describe('DOM jsx tests', () => {
     );
 
     expect(element.children.length).toBe(1);
-  })
+  });
+
+  it('should throw errors if invalid types are provided', () => {
+    const ReturnsUndefined = () => {};
+
+    expect(() => <ReturnsUndefined />).toThrow();
+    expect(() => dom()).toThrow();
+  });
 });
