@@ -14,6 +14,7 @@ module.exports = {
         experimentalObjectRestSpread: true,
         impliedStrict: true,
         globalReturn: false
+        jsx: true,
       }
     },
     rules: {
