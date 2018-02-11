@@ -1,14 +1,13 @@
-import { createElement } from '../vdom/createElement';
+import { createElement } from '../vdom';
 
-const types = {
+export const types = {
   create: 'CREATE',
   remove: 'REMOVE',
   replace: 'REPLACE',
   update: 'UPDATE',
-  skip: 'SKIP',
 };
 
-const create = ({
+export const create = ({
   parent,
   element = null,
   previous = null,
@@ -24,5 +23,3 @@ const create = ({
     element: next !== null ? createElement(next) : next,
   },
 });
-
-export { create, types };

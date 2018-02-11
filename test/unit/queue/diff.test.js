@@ -125,6 +125,26 @@ describe('diff', () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it('should skip nodes that have not changed', async () => {
+    const {
+      parent,
+      element,
+      next,
+    } = mockFiber();
+
+    const first = create({
+      parent,
+      element,
+      next,
+      previous: next,
+    });
+
+    add(first);
+
+    await render();
+    expect(getLastMockCall(reconcile)[0].length).toBe(0);
+  });
+
   it('should handle text nodes, too', async () => {
     const {
       parent,

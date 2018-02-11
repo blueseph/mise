@@ -16,7 +16,7 @@ describe('component tests', () => {
       template: state => actions => <div>hey!</div>,
     });
 
-    await render();
+    await render(250);
 
     expect(body.innerHTML).not.toEqual('');
   });

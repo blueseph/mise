@@ -20,7 +20,8 @@ const TodoItem = ({
     onupdate={update}
   >
     <span
-      style={done ? { fontSize: "18px", textDecoration: "line-through" } : { fontSize: "18px" }}
+      style={done ? { fontSize: "16px", textDecoration: "line-through" } : { fontSize: "18px" }}
+      class={done ? 'done' : ''}
       onclick={_ => toggle({ id })}>
       {text}
     </span>
@@ -167,7 +168,7 @@ describe('counter example', () => {
     body.querySelector(firstTodoSpanSelector).click();
 
     await render();
-    expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 18px; text-decoration: line-through;">new todo</span>');
+    expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 16px; text-decoration: line-through;" class="done">new todo</span>');
   });
 
   it('should set the todo to done, then unset it', async () => {
@@ -179,7 +180,7 @@ describe('counter example', () => {
     body.querySelector(firstTodoSpanSelector).click();
 
     await render();
-    expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 18px; text-decoration: line-through;">new todo</span>');
+    expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 16px; text-decoration: line-through;" class="done">new todo</span>');
 
     await render();
     body.querySelector(firstTodoSpanSelector).click();

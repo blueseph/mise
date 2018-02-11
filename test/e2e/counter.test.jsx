@@ -34,7 +34,7 @@ describe('counter example', () => {
       },
     });
 
-    await render();
+    await render(250);
   });
 
   it('should load a counter', async () => {

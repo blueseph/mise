@@ -1,13 +1,14 @@
-import { setProps } from './createElement';
+import { setProps } from './dom';
 import { types } from '../queue/fiber';
 
-const reconcile = (fibers) => {
+export const reconcile = (fibers) => {
   for (const fiber of fibers) {
     const {
       action,
       next,
       previous,
       parent,
+      differences,
     } = fiber;
 
     switch (action) {
@@ -33,7 +34,7 @@ const reconcile = (fibers) => {
       }
 
       case (types.update): {
-        setProps(previous.element, previous.tree.props, next.tree.props);
+        setProps(previous.element, differences);
 
         break;
       }
@@ -44,5 +45,3 @@ const reconcile = (fibers) => {
     }
   }
 };
-
-export { reconcile };

@@ -1,7 +1,7 @@
 import { commis } from '@mise/test';
 
 import { dom } from '../../../src';
-import { createElement } from '../../../src/vdom/createElement';
+import { createElement, compareAttributes } from '../../../src/vdom';
 import { reconcile } from '../../../src/vdom/reconcile';
 import { create, types } from '../../../src/queue/fiber';
 
@@ -138,6 +138,7 @@ describe('reconcile', () => {
       });
 
       fiber.action = types.update;
+      fiber.differences = compareAttributes(fiber.previous.tree.props, fiber.next.tree.props);
 
       reconcile([fiber]);
 
@@ -171,6 +172,7 @@ describe('reconcile', () => {
       });
 
       fiber.action = types.update;
+      fiber.differences = compareAttributes(fiber.previous.tree.props, fiber.next.tree.props);
 
       reconcile([fiber]);
 
@@ -204,6 +206,7 @@ describe('reconcile', () => {
       });
 
       fiber.action = types.update;
+      fiber.differences = compareAttributes(fiber.previous.tree.props, fiber.next.tree.props);
 
       reconcile([fiber]);
 
@@ -236,6 +239,7 @@ describe('reconcile', () => {
       });
 
       fiber.action = types.update;
+      fiber.differences = compareAttributes(fiber.previous.tree.props, fiber.next.tree.props);
 
       reconcile([fiber]);
 

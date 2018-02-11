@@ -2,7 +2,7 @@ import { createDiff } from './queue/diff';
 import { create } from './queue/fiber';
 import { compose, makeCopy } from './utils';
 
-const component = ({
+export const component = ({
   template = () => () => {},
   state = {},
   actions = {},
@@ -54,7 +54,7 @@ const component = ({
         const readOnlyState = makeCopy(appState);
         const readOnlyActions = makeCopy(appActions);
 
-        const boundFn = fn.bind(null, readOnlyState, readOnlyActions);
+        const boundFn = args => fn(readOnlyState, readOnlyActions, args);
 
         const middlewares = middleware.map(m => m(readOnlyState)(key));
         const composedFn = compose(...middlewares)(boundFn);
@@ -95,5 +95,3 @@ const component = ({
 
   initialize(actions);
 };
-
-export { component };

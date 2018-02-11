@@ -61,17 +61,25 @@ describe('lifecycle tests', () => {
     const spy = jest.fn();
     const internalSpy = () => spy;
 
-    const template = () => actions => (
+    const template = state => actions => (
       <div>
-        <div onupdate={internalSpy} />
-        <button onclick={actions.noop} />
+        <div
+          onupdate={internalSpy} 
+          class={state.change ? 'a' : ''}
+        />
+        <button onclick={actions.change} />
       </div>
     );
     const actions = {
-      noop: () => ({}),
+      change: () => ({
+        change: true,
+      }),
+    };
+    const state = {
+      change: false,
     };
 
-    component({ template, actions });
+    component({ template, actions, state });
 
     await render();
     body.querySelector('button').click();

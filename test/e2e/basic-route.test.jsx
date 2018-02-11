@@ -1,5 +1,6 @@
-import { dom, component } from '../../src';
 import { commis } from '@mise/test';
+
+import { dom, component } from '../../src';
 
 const { render } = commis();
 

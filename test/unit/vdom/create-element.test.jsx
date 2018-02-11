@@ -1,5 +1,5 @@
-import { dom } from '../../../src/index';
-import { createElement } from '../../../src/vdom/createElement';
+import { dom } from '../../../src';
+import { createElement } from '../../../src/vdom';
 
 describe('create element', () => {
   it('should create a simple text node', () => {
@@ -35,5 +35,14 @@ describe('create element', () => {
     const element = createElement(node);
 
     expect(element.outerHTML).toBe('<div id="neato-element"></div>');
+  });
+
+  it('should return an svg node if it needs to', () => {
+    const node = <svg id="hello" />;
+    node.nodeName = 'svg';
+
+    const element = createElement(node);
+
+    expect(element.outerHTML).toBe('<svg id="hello"></svg>');
   });
 });
