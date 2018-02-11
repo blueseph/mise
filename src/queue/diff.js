@@ -8,15 +8,15 @@ const shouldReplace = (previous, updated) =>
 
 const getFiberizedChildren = (fiber) => {
   let children = [];
-  const prevChildren = (fiber.previous.tree && fiber.previous.tree.children) || [];
-  const nextChildren = (fiber.next.tree && fiber.next.tree.children) || [];
+  const prevChildren = fiber.previous.tree?.children || [];
+  const nextChildren = fiber.next.tree?.children || [];
   const length = Math.max(prevChildren.length, nextChildren.length);
 
   if (fiber.previous.element && fiber.previous.element.nodeType !== Node.TEXT_NODE) {
     for (let i = 0; i < length; i += 1) {
       const newFiber = create({
         parent: fiber.previous.element,
-        element: (fiber.previous.element && fiber.previous.element.childNodes[i]) || null,
+        element: fiber.previous.element?.childNodes[i],
         previous: prevChildren[i],
         next: nextChildren[i],
       });
@@ -34,7 +34,7 @@ const triggerLifeCycle = (
   lifecycle,
 ) => {
   if (typeof tree === 'object') {
-    if (tree.props[lifecycle]) tree.props[lifecycle](element);
+    tree.props?.[lifecycle]?.(element);
 
     Array.from(element.children)
       .filter(child => child)
@@ -67,18 +67,13 @@ const diff = (original) => {
 
   if (shouldReplace(fiber.previous.tree, fiber.next.tree)) {
     fiber.action = types.replace;
-
-    if (fiber.next.tree.props && fiber.next.tree.props.onupdate) {
-      fiber.next.tree.props.onupdate(fiber.next.element)(fiber.previous.tree.props);
-    }
+    fiber.next.tree.props?.onupdate?.(fiber.next.element)(fiber.previous.tree.props);
 
     return fiber;
   }
 
   fiber.action = types.update;
-  if (fiber.next.tree.props && fiber.next.tree.props.onupdate) {
-    fiber.next.tree.props.onupdate(fiber.next.element)(fiber.previous.tree.props);
-  }
+  fiber.next.tree.props?.onupdate?.(fiber.next.element)(fiber.previous.tree.props);
 
   return fiber;
 };
@@ -102,10 +97,8 @@ const createDiff = () => {
       if (completed.action !== types.skip) {
         const children = getFiberizedChildren(fiber);
 
-        if (children.length) {
-          // eslint-disable-next-line no-use-before-define
-          children.forEach(add);
-        }
+        // eslint-disable-next-line no-use-before-define
+        children.forEach(add);
 
         finished = [...finished, completed];
       }

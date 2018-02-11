@@ -1,5 +1,4 @@
 const path = require('path');
-const restSpread = require('babel-plugin-transform-object-rest-spread');
 
 module.exports = {
   entry: './src/index',
@@ -12,10 +11,6 @@ module.exports = {
     umdNamedDefine: true,
   },
 
-  resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
-  },
-
   devtool: 'source-map',
 
   module: {
@@ -25,16 +20,7 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: ['env'],
-            plugins: [restSpread],
-          },
         },
-      },
-      {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        loader: 'awesome-typescript-loader',
       },
     ],
   },

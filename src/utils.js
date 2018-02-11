@@ -1,3 +1,4 @@
+/* TODO: nullish coalescing when babel-eslint supports it */
 const getUniques = (first, second) =>
   new Set([...Object.keys(first || {}), ...Object.keys(second || {})]);
 

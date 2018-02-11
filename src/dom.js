@@ -15,6 +15,7 @@ const dom = (type, uncheckedProps = {}, ...uncheckedChildren) => {
     }
   }
 
+  /* TODO: nullish coalescing when babel-eslint supports it */
   if (uncheckedProps === null) { props = {}; }
 
   if (typeof type === 'function') {
