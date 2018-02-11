@@ -13,7 +13,7 @@ module.exports = {
       ecmaFeatures: {
         experimentalObjectRestSpread: true,
         impliedStrict: true,
-        globalReturn: false
+        globalReturn: false,
         jsx: true,
       }
     },
