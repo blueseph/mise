@@ -42,7 +42,7 @@ describe('diff', () => {
 
     add(first);
 
-    await render();
+    await render(250);
 
     expect(getLastMockCall(reconcile)[0][0].action).toBe(types.replace);
     expect(spy).toHaveBeenCalled();

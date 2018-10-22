@@ -10,7 +10,7 @@ describe('get fiberized children', () => {
 
     const children = getFiberizedChildren(fiber);
 
-    expect(children).toEqual([]);
+    expect(children.length).toEqual(0);
   });
 
   it('should return the correct number of children when passed down a fiber', () => {
@@ -33,5 +33,26 @@ describe('get fiberized children', () => {
     const children = getFiberizedChildren(fiber);
 
     expect(children.length).toEqual(2);
+  });
+
+  it('should return an empty list if the parent is a text node', () => {
+    const {
+      element,
+      previous,
+      next,
+    } = mockFiber();
+
+    const parent = document.createTextNode('text node parent');
+
+    const fiber = create({
+      parent,
+      element,
+      previous,
+      next,
+    });
+
+    const children = getFiberizedChildren(fiber);
+
+    expect(children.length).toEqual(0);
   });
 });

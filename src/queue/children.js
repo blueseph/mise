@@ -6,7 +6,7 @@ export const getFiberizedChildren = (fiber) => {
   const nextChildren = fiber.next.tree?.children || [];
   const length = Math.max(prevChildren.length, nextChildren.length);
 
-  if (fiber.previous.element) {
+  if (fiber.previous.element && fiber.previous.element.nodeType !== Node.TEXT_NODE) {
     for (let i = 0; i < length; i += 1) {
       const parent = fiber.previous.element;
       const element = fiber.previous.element?.childNodes[i];
