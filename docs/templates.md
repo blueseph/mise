@@ -68,6 +68,56 @@ const TodoItem = ({
 
 By composing templates, we can keep items compartmentalized and easy to test. This also reduces the cognative load of onboarding a new developer - it's easy to see the hierarchy.
 
+#### Context
+
+`Prop drilling`, or passing down props through unrelated templates, muddies up what should be a clean hierarchy. If enough items need to be passed down, it gets tempting to pass down all the props all the time, making it difficult to know what exists in them.
+
+```javascript
+import { dom } from '@mise/core';
+import { Product } from './src/templates/blog';
+import { CheckoutCart } from './src/templates/shop';
+
+const App = state => actions => (
+  <main>
+    <Shop state={state.shop} actions={actions} />
+    <Blog state={state.blog} actions={actions} />
+  </main>
+)
+```
+
+App never actually needed to know about `state` or `actions`, but it did need to pass these to secondary templates. Given a long enough chain of secondary templates, unrelated props get passed down through templates that don't care about them.
+With context, you can specifically request `state`, `actions`, or a slice of the `state` on demand and avoid prop drilling.
+
+```javascript
+import { dom } from '@mise/core';
+import { Product } from './src/templates/products';
+import { CheckoutCart } from './src/templates/checkout-cart';
+
+const App = state => actions => (
+  <div>
+    <Shop />
+    <Blog />
+  </div>
+)
+
+const Shop = () => (
+  <main>
+    <Products $MiseState={state => state.shop} />
+    <Cart $MiseActions />
+  </main>
+)
+
+const Products = ({ products, specials, tracking, }) => (
+  /* ... */
+)
+
+const Cart = ({ checkout, applyDiscount, }) => (
+  /* ... */
+)
+```
+
+Our App template never needed to know about any props that didn't relate to it. We can keep our templates clean of any erroneous info that's hard to map mentally.
+
 #### Testing
 
 Since Mise components are all pure functions, testing them is simple. We use Jest and strongly suggest that you use it to test Mise.

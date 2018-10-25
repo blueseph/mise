@@ -1,6 +1,7 @@
 import { createDiff } from './queue/diff';
 import { create } from './queue/fiber';
 import { compose, makeCopy } from './utils';
+import { context } from './context';
 
 export const component = ({
   template = () => () => {},
@@ -19,6 +20,9 @@ export const component = ({
   const generateTemplate = unsafeState => (unsafeActions) => {
     const readOnlyState = makeCopy(unsafeState);
     const readOnlyActions = makeCopy(unsafeActions);
+
+    context.state = readOnlyState;
+    context.actions = readOnlyActions;
 
     return template(readOnlyState)(readOnlyActions);
   };

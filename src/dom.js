@@ -1,3 +1,5 @@
+import { context } from './context';
+
 const typeError = 'dom was called with an undefined type. Did you forget to define something?';
 const invalidFunctionValue = name => `${name} was called and returned undefined. Are you sure it's defined properly?`;
 
@@ -19,7 +21,23 @@ export const dom = (type, uncheckedProps = {}, ...uncheckedChildren) => {
   if (uncheckedProps === null) { props = {}; }
 
   if (typeof type === 'function') {
-    const templateValue = type(props, children);
+    const { $MiseState, $MiseActions, ...valid } = props;
+    props = valid;
+
+    let ctxState = {};
+    let ctxActions = {};
+
+    if ($MiseState) {
+      ctxState = typeof $MiseState === 'function' ? $MiseState(context.state) : context.state;
+    }
+
+    if ($MiseActions) ctxActions = context.actions;
+
+    const templateValue = type({
+      ...ctxState,
+      ...ctxActions,
+      ...props,
+    }, children);
 
     if (templateValue === undefined) throw new Error(invalidFunctionValue(type.name));
     return templateValue;

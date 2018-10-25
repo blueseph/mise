@@ -1,4 +1,5 @@
 import { dom } from '../../src/';
+import { context } from '../../src/context';
 
 describe('DOM jsx tests', () => {
   it('should be defined', () => {
@@ -132,4 +133,28 @@ describe('DOM jsx tests', () => {
     expect(() => <ReturnsUndefined />).toThrow();
     expect(() => dom()).toThrow();
   });
+
+  it('should handle context props', () => {
+    const actionsFn = () => {};
+    context.actions = {
+      fn: actionsFn,
+    };
+    context.state = {
+      name: 'dan',
+      nested: {
+        name: 'bruce',
+      },
+    };
+    const StatelessComponent = ({ name }) => name;
+    const ActionComponent = ({ fn }) => {
+      expect(fn).toBe(context.actions.fn);
+      return null;
+    };
+
+    expect(<StatelessComponent $MiseState />).toBe(context.state.name);
+    expect(<StatelessComponent $MiseState={state => state.nested} />).toBe(context.state.nested.name);
+
+    <ActionComponent $MiseActions />;
+  });
 });
+
