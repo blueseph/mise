@@ -8,10 +8,10 @@ export const setProp = (element, attribute, value) => {
   }
 
   if (
-    typeof value !== 'function' &&
-    attribute !== 'value' &&
-    attribute !== 'boolean' &&
-    value
+    typeof value !== 'function'
+    && attribute !== 'value'
+    && attribute !== 'boolean'
+    && value
   ) {
     element.setAttribute(attribute, value);
   }
@@ -80,8 +80,8 @@ export const createElement = (node) => {
   if (typeof node === 'string') return document.createTextNode(node);
 
   const { type, props, children } = node;
-  const element = node.nodeName !== 'svg' ?
-    document.createElement(type) : createSVGNode(node);
+  const element = node.nodeName !== 'svg'
+    ? document.createElement(type) : createSVGNode(node);
   setProps(element, compareAttributes({}, props));
 
   children
@@ -90,4 +90,3 @@ export const createElement = (node) => {
 
   return element;
 };
-

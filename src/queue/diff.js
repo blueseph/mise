@@ -37,8 +37,8 @@ export const diff = (original) => {
     const { attributes, styles } = differences;
 
     if (
-      !isEmpty(attributes) ||
-      !isEmpty(styles?.add)
+      !isEmpty(attributes)
+      || !isEmpty(styles?.add)
     ) {
       fiber.action = types.update;
       fiber.differences = differences;

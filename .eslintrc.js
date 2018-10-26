@@ -8,14 +8,8 @@ module.exports = {
     extends: 'airbnb',
     parser: 'babel-eslint',
     parserOptions: {
-      ecmaVersion: 2017,
+      ecmaVersion: 8,
       sourceType: 'module',
-      ecmaFeatures: {
-        experimentalObjectRestSpread: true,
-        impliedStrict: true,
-        globalReturn: false,
-        jsx: true,
-      }
     },
     rules: {
       'no-param-reassign': 'off', /* sadly, we have to reassign params to deal with props */

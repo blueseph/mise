@@ -1,3 +1,2 @@
-export const shouldUpdate = (previous, next) =>
-  typeof previous === typeof next &&
-  typeof previous !== 'string';
+export const shouldUpdate = (previous, next) => typeof previous === typeof next
+  && typeof previous !== 'string';

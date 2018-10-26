@@ -7,6 +7,4 @@ export {
   createSVGNode,
 } from './dom';
 
-export {
-  reconcile,
-} from './reconcile';
+export { reconcile } from './reconcile';

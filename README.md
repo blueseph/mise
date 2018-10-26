@@ -12,7 +12,7 @@ Mise has zero dependencies and strives for performance.
 * Easy state management.
 * Highly testable.
 * Asynchronous rendering.
-* Small file size (9kb~ minified, 2.5 kb gzipped).
+* Small file size (13kb~ minified, 4kb~ gzipped).
 
 #### Installation
 ```
