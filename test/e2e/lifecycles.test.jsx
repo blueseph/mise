@@ -21,7 +21,7 @@ describe('lifecycle tests', () => {
 
     component({ template });
 
-    await render();
+    await render(150);
 
     expect(spy).toHaveBeenCalled();
   });
@@ -50,10 +50,10 @@ describe('lifecycle tests', () => {
       actions,
     });
 
-    await render();
+    await render(150);
     body.querySelector('button').click();
 
-    await render();
+    await render(150);
     expect(spy).toHaveBeenCalled();
   });
 
@@ -81,10 +81,10 @@ describe('lifecycle tests', () => {
 
     component({ template, actions, state });
 
-    await render();
+    await render(150);
     body.querySelector('button').click();
 
-    await render();
+    await render(150);
     expect(spy).toHaveBeenCalled();
   });
 
@@ -103,7 +103,7 @@ describe('lifecycle tests', () => {
 
     component({ template });
 
-    await render();
+    await render(150);
 
     expect(spy).toHaveBeenCalledTimes(3);
   });

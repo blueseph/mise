@@ -48,14 +48,14 @@ describe('counter example', () => {
   it('should respond correctly to an increment action', async () => {
     body.querySelector('#up').click();
 
-    await render();
+    await render(150);
     expect(body.querySelector('#counter').innerHTML).toEqual('1');
   });
 
   it('should respond correctly to an decrement action', async () => {
     body.querySelector('#down').click();
 
-    await render();
+    await render(150);
     expect(body.querySelector('#counter').innerHTML).toEqual('-1');
   });
 });

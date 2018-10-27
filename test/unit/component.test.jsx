@@ -29,7 +29,7 @@ describe('component tests', () => {
       init: initFn,
     });
 
-    await render();
+    await render(150);
 
     expect(init).toHaveBeenCalled();
   });
@@ -45,7 +45,7 @@ describe('component tests', () => {
       init: state => actions => actions.noop(),
     });
 
-    await render();
+    await render(150);
 
     expect(body.querySelectorAll('.pleaseDontDoubleRender').length).toEqual(1);
   })
@@ -62,7 +62,7 @@ describe('component tests', () => {
       },
     });
 
-    await render();
+    await render(150);
 
     expect(body.querySelector('#text').innerHTML).toEqual('hello, world');
   });
@@ -110,7 +110,7 @@ describe('component tests', () => {
       },
     });
 
-    await render();
+    await render(150);
     body.querySelector('#async').click();
 
     await render(100);
@@ -137,10 +137,10 @@ describe('component tests', () => {
       middleware: [middleware],
     });
 
-    await render();
+    await render(150);
     body.querySelector('#update').click();
 
-    await render();
+    await render(150);
     expect(middlewareFn).toHaveBeenCalled();
   });
 
@@ -152,7 +152,7 @@ describe('component tests', () => {
         </div>
     })
 
-    await render();
+    await render(150);
 
     const nulled = body.querySelector('#null');
 
@@ -178,7 +178,7 @@ describe('component tests', () => {
       }
     });
 
-    await render();
+    await render(150);
 
     const nulled = body.querySelector('#null');
     const renderNulls = body.querySelector('#renderNulls');
@@ -187,7 +187,7 @@ describe('component tests', () => {
     expect(nulled.innerHTML).toEqual('<article></article>');
 
     renderNulls.click();
-    await render();
+    await render(150);
 
     expect(nulled.innerHTML).toEqual('<main></main><article></article>');
   });
@@ -210,7 +210,7 @@ describe('component tests', () => {
       }
     });
 
-    await render();
+    await render(150);
 
     const items = body.querySelector('#items');
     const addItems = body.querySelector('#addItems');
@@ -220,7 +220,7 @@ describe('component tests', () => {
     addItems.click();
     addItems.click();
     addItems.click();
-    await render();
+    await render(150);
 
     expect(items.children.length).toEqual(3);
   });
@@ -241,7 +241,7 @@ describe('component tests', () => {
       },
     });
 
-    await render();
+    await render(150);
 
     const node = body.querySelector('#textNodeToRegularNode');
     const nodeButton = body.querySelector('#textNodeToRegularNodeAction');
@@ -249,7 +249,7 @@ describe('component tests', () => {
     expect(node.innerHTML).toEqual("0");
 
     nodeButton.click();
-    await render();
+    await render(150);
 
     expect(node.innerHTML).toEqual('<div><main> hello, world! </main></div>');
   });

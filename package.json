@@ -31,6 +31,11 @@
     ],
     "testURL": "http://localhost"
   },
+  "bundlesize": [
+    {
+      "path": "./dist/mise.js"
+    }
+  ],
   "author": "dan b.",
   "license": "MIT",
   "devDependencies": {

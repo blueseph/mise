@@ -76,7 +76,7 @@ describe('context example', () => {
   it('should have an onclick passed in via context', async () => {
     body.querySelector('#changename').click();
 
-    await render();
+    await render(150);
     expect(body.querySelector('#person').innerHTML).toBe('<h1>bruce</h1><div>18</div>');
   });
 

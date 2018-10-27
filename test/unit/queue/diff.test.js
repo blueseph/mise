@@ -71,7 +71,7 @@ describe('diff', () => {
 
     add(first);
 
-    await render();
+    await render(150);
     expect(getLastMockCall(reconcile)[0][0].action).toBe(types.update);
     expect(spy).toHaveBeenCalledTimes(1);
   });
@@ -96,7 +96,7 @@ describe('diff', () => {
 
     add(first);
 
-    await render();
+    await render(150);
     expect(getLastMockCall(reconcile)[0][0].action).toBe(types.create);
     expect(spy).toHaveBeenCalled();
   });
@@ -120,7 +120,7 @@ describe('diff', () => {
 
     add(first);
 
-    await render();
+    await render(150);
     expect(getLastMockCall(reconcile)[0][0].action).toBe(types.remove);
     expect(spy).toHaveBeenCalled();
   });
@@ -141,7 +141,7 @@ describe('diff', () => {
 
     add(first);
 
-    await render();
+    await render(150);
     expect(getLastMockCall(reconcile)[0].length).toBe(0);
   });
 
@@ -163,7 +163,7 @@ describe('diff', () => {
 
     add(first);
 
-    await render();
+    await render(150);
     expect(getLastMockCall(reconcile)[0][0].action).toBe(types.replace);
   });
 
@@ -186,7 +186,7 @@ describe('diff', () => {
 
     add(first);
 
-    await render();
+    await render(150);
     expect(getLastMockCall(reconcile)[0].length).toBe(4);
     expect(getLastMockCall(reconcile)[0][0].action).toBe(types.replace);
     expect(getLastMockCall(reconcile)[0][1].action).toBe(types.create);

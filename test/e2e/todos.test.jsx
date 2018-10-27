@@ -138,24 +138,24 @@ describe('counter example', () => {
   it('should add a todo', async () => {
     addTodo();
 
-    await render();
+    await render(150);
     expect(body.querySelector('#todos').childNodes.length).toBe(1);
   });
 
   it('should clear the input after adding a todo', async () => {
     addTodo();
 
-    await render();
+    await render(150);
     expect(input.value).not.toBe('new todo');
   });
 
   it('should remove the todo', async () => {
     addTodo();
 
-    await render();
+    await render(150);
     body.querySelector('#todos span:last-child').click();
 
-    await render();
+    await render(150);
     expect(body.querySelector('#todos').childNodes.length).toBe(0);
   });
 
@@ -164,10 +164,10 @@ describe('counter example', () => {
 
     addTodo();
 
-    await render();
+    await render(150);
     body.querySelector(firstTodoSpanSelector).click();
 
-    await render();
+    await render(150);
     expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 16px; text-decoration: line-through;" class="done">new todo</span>');
   });
 
@@ -176,16 +176,16 @@ describe('counter example', () => {
 
     addTodo();
 
-    await render();
+    await render(150);
     body.querySelector(firstTodoSpanSelector).click();
 
-    await render();
+    await render(150);
     expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 16px; text-decoration: line-through;" class="done">new todo</span>');
 
-    await render();
+    await render(150);
     body.querySelector(firstTodoSpanSelector).click();
 
-    await render();
+    await render(150);
     expect(body.querySelector(firstTodoSpanSelector).outerHTML).toEqual('<span style="font-size: 18px;">new todo</span>');
   });
 
@@ -194,11 +194,11 @@ describe('counter example', () => {
     addTodo();
     addTodo();
 
-    await render();
+    await render(150);
     expect(body.querySelector('#todos').childNodes.length).toBe(3);
     body.querySelector('#clear').click();
 
-    await render();
+    await render(150);
     expect(body.querySelector('#todos').childNodes.length).toBe(0);
   });
 });

@@ -1,11 +1,13 @@
 language: node_js
 dist: trusty
-sudo: required
-node_js: 8.9
+sudo: false
+node_js: 11.0.0
 install:
   - npm install
   - npm install codecov
+  - npm install bundlesize
 script:
   - npm start
 after_success:
+  - bundlesize
   - ./node_modules/.bin/codecov -e TRAVIS_NODE_VERSION -f coverage/lcov.info
