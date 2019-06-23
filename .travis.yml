@@ -1,7 +1,7 @@
 language: node_js
-dist: trusty
+dist: xenial
 sudo: false
-node_js: 11.0.0
+node_js: 12.0.0
 install:
   - npm install
   - npm install codecov
